@@ -1,0 +1,185 @@
+<!-- app/views/movies/index.html.erb --> <!-- Vista para buscar películas -->
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag :movies, "data-turbo-track": "reload" %>
+<% end %>
+<h2><%= t("movies.search") %></h2>
+
+<%= form_with url: url_for(only_path: true, params: request.query_parameters), method: :get, local: true do %>
+  <%= label_tag :query, t("movies.namesearch") %>
+  <%= text_field_tag :query, params[:query].to_s.strip, id: "movie-search-textbox" %>
+  <%= submit_tag t("search"), id: "movie-search-button" %>
+<% end %>
+
+<% if @movies.present? %>
+  <div id="movies-container">
+    <% @movies.each do |movie| %>
+      <div class="movie">
+        <div class="movie-left">
+          <%= image_tag(movie['poster_path'] ? "https://image.tmdb.org/t/p/w500#{movie['poster_path']}" : asset_path('placeholder.png'), class: "movie-poster", onclick: "postToStoreMovies({ id: '#{movie["id"]}', title: '#{j movie["title"]}', overview: '#{j movie["overview"]}', poster_path: '#{movie["poster_path"]}', combined_rating: '#{movie["combined_rating"]}' })") %>
+          <div class="movie-rating" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>" vote_average="<%= movie['vote_average'] %>" vote_count="<%= movie['vote_count'] %>">
+            <% combined_rating = (movie['combined_rating'] || 0).to_f %>
+            <% user_rating = current_user&.ratings&.find_by(movie_id: movie['id'])&.score || 0 %>
+
+            <% 1.upto(5) do |i| %>
+              <% star_class = 
+                if combined_rating >= i
+                  "fa-solid"
+                elsif combined_rating >= i - 0.5
+                  "fa-solid fa-star-half-stroke"
+                else
+                  "fa-regular"
+                end
+              %>
+              <% star_color = (user_rating >= i - 0.5) ? "color: #8FD053" : "" %>
+              <i class="fa-star <%= star_class %> star" style="<%= star_color %>" data-score="<%= i %>"></i>
+            <% end %>
+            <br>
+            <span class="rating-score">
+              <%= number_with_precision(combined_rating, precision: 1) %> / 5 (<%= (movie['vote_count'] || 0) + (movie['user_count'] || 0) %> <%= t("ratings") %>)
+            </span>
+          </div>
+        </div>
+
+        <div class="movie-details">
+          <strong><%= movie['title'] %></strong><br>
+          <%= movie['overview'] %><br>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% elsif params[:query].present? %>
+  <p><%= t("movies.noresults") %></p>
+<% end %>
+
+
+<div class="pagination">
+  <% if params[:query].present? && @movies.present? %>
+    <% if @current_page > 1 %>
+      <%= link_to t("pagination.previous"), search_movies_path(query: params[:query], page: @current_page - 1), class: "pagination-link" %>
+    <% end %>
+
+    <span><%= t("pagination.page") %> <%= @current_page %> / <%= @total_pages %></span>
+
+    <% if @current_page < @total_pages %>
+      <%= link_to t("pagination.next"), search_movies_path(query: params[:query], page: @current_page + 1), class: "pagination-link" %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_include_tag "movie_search", "data-turbo-track": "reload", defer: true %>
+
+<script>
+  function postToStoreMovies(movie) {
+  // Crear formulario
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/movies/store';
+  form.style.display = 'none';
+
+  // Agregar token CSRF
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  const csrfInput = document.createElement('input');
+  csrfInput.type = 'hidden';
+  csrfInput.name = 'authenticity_token';
+  csrfInput.value = csrfToken;
+  form.appendChild(csrfInput);
+
+  // Agregar parámetros movie (como campos ocultos)
+  for (const key in movie) {
+    if (movie.hasOwnProperty(key)) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = `movie[${key}]`;
+      input.value = movie[key];
+      form.appendChild(input);
+    }
+  }
+
+  // Añadir el formulario al body y enviarlo
+  document.body.appendChild(form);
+  form.submit();
+}
+
+document.addEventListener("turbo:load", () => { // Cuando cargue la página
+  const stars = document.querySelectorAll(".star"); // Conseguir las estrellas
+  let isSending = false;
+  stars.forEach((star) => {
+    if(star.dataset.listenerAttached === "true") return;
+    star.dataset.listenerAttached = "true";
+    star.addEventListener("click", (event) => { // Hacer las estrellas clickeables
+      if (isSending) return;
+      isSending = true;
+      const score = event.target.dataset.score; // Conseguir la puntuación
+      const title = event.target.parentElement.getAttribute("title");
+      const overview = event.target.parentElement.getAttribute("overview");
+      const poster_path = event.target.parentElement.getAttribute("poster_path");
+      const tmdb_vote_average = event.target.parentElement.getAttribute("vote_average");
+      const tmdb_vote_count = event.target.parentElement.getAttribute("vote_count");
+      const movieId = event.target.parentElement.dataset.movieId; // Conseguir la id de la película
+      fetch("/ratings", { // Enviar a la base de datos
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document
+            .querySelector("meta[name='csrf-token']")
+            .getAttribute("content"),
+        },
+        body: JSON.stringify({
+          rating: {
+            score: score,
+            movie_id: movieId,
+          },
+          movie:
+            {
+              title: title,
+              overview: overview,
+              poster_path: poster_path,
+              tmdb_vote_average: tmdb_vote_average,
+              tmdb_vote_count: tmdb_vote_count,
+            }
+        }),
+      })
+        .then((response) => {
+          if (response.redirected) { // Redigir al login si el usuario no ha iniciado sesión
+            window.location.href = response.url;
+          } else if (!response.ok) {
+            throw new Error("Request failed");
+          } else {
+            return response.json();
+          }
+        })
+        .then((data) => {
+          if (data) {
+            const ratingDiv = document.querySelector( // Conseguir el contenedor del rating de la película
+              `.movie-rating[data-movie-id="${movieId}"]`
+            );
+            if (ratingDiv) {
+              const voteAverageRaw = ratingDiv.getAttribute("vote-average");
+              const voteAverage = parseFloat(voteAverageRaw) / 2;
+              const dbRatings = parseFloat(data.ratings);
+              const voteCount = parseInt(ratingDiv.getAttribute("vote-count"), 10);
+              const dbCount = parseInt(data.count, 10);
+              const ratingsText = ratingDiv.getAttribute("ratings-text") || "";
+              const totalRatingSum = voteAverage * voteCount + dbRatings * dbCount;
+              const totalVotes = voteCount + dbCount;
+              const combinedAverage = totalVotes > 0 ? totalRatingSum / totalVotes : 0;
+              const formattedAverage = combinedAverage.toFixed(1);
+              // Combinar los ratings de la API con los de la base de datos
+              ratingDiv.querySelector(".rating-score").textContent = `${formattedAverage} / 5 (${totalVotes} ${ratingsText})`;
+              const estrellas = ratingDiv.querySelectorAll(".fa-star");
+              estrellas.forEach((estrella, index) => {
+                estrella.style.color = index < score ? "#8FD053" : "";
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        })
+        .finally(() => {
+          isSending = false;
+        })
+    });
+  });
+});
+</script>

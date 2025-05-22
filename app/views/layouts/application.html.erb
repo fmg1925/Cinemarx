@@ -1,0 +1,73 @@
+<!-- app/views/layouts/application.html.erb --> <!-- Plantilla principal -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Movie Lister" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %> <!-- Insertar head de la vista -->
+
+    <link rel="icon" href="<%= asset_path("icon.png") %>" type="image/png">
+
+    <%= stylesheet_link_tag :application, "data-turbo-track": "reload" %>
+    <%= yield :stylesheets %> <!-- Insertar stylesheet de la vista -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!-- Usar font awesome para las estrellas -->
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header>
+      <%= link_to 'Cinemarx', home_path, id: "title" %><br>
+      <%= link_to t("movies.popular"), movies_path, class: "header-links" %>
+      <%= link_to t("movies.search"), search_movies_path, class: "header-links" %>
+
+      <% if !logged_in? %>
+      <%= link_to t("login.title"), login_path, class: "header-links" %>
+      <%= link_to t("login.register"), new_user_path, class: "header-links" %>
+      <% elsif logged_in? %>
+        <%= link_to t("login.logout"), logout_path, class: "header-links confirm", data: { controller: "confirm", action: "confirm#confirm"} %>
+      <% end %>
+
+      <% if admin? %>
+        <%= link_to t("users.list"), users_path, class: "header-links" %>
+        <%= link_to t("users.create"), new_user_path, class: "header-links" %>
+      <% end %>
+      <%= form_with url: request.path, method: :get, local: true, html: { id: "language-dropdown" } do %>
+        <% params.to_unsafe_h.except(:locale, :controller, :action).each do |key, value| %>
+          <% if value.is_a?(Array) %>
+            <% value.each do |v| %>
+              <%= hidden_field_tag key, v %>
+            <% end %>
+          <% else %>
+            <%= hidden_field_tag key, value %>
+          <% end %>
+        <% end %>
+
+        <%= select_tag :locale, options_for_select([["English", "en"], ["Español", "es"], ["한국어", "ko"], ["中文", "zh"]], I18n.locale), onchange: "this.form.submit();" %>
+      <% end %>
+    </header>
+    <% if flash[:notice] %> <!-- Mostrar errores y alertas en todas las páginas -->
+      <p style="color: lime;"><%= flash[:notice] %></p>
+    <% elsif flash[:alert] %>
+      <p style="color: yellow;"><%= flash[:alert] %></p>
+    <% end %>
+    <%= yield %> <!-- Insertar body de la vista -->
+    <script>
+      document.addEventListener("turbo:load", () => { // Al cargar la página
+        document.querySelectorAll(".confirm:not([data-confirm-processed])").forEach(element => { // Todos los elementos de clase confirm
+          element.dataset.confirmProcessed = "true";
+
+          element.addEventListener("click", event => {
+            if (!confirm("<%= j t("confirmation") %>")) { // Mostrar confirmación traducida
+              event.preventDefault();
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

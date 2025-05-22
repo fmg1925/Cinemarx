@@ -1,0 +1,2 @@
+class CachedMovie < ApplicationRecord
+end

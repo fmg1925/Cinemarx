@@ -1,0 +1,62 @@
+ko:
+  welcome: "Cinemarx에 오신 것을 환영합니다"
+  login:
+    title: "로그인"
+    username: "사용자 이름"
+    password: "비밀번호"
+    submit: "로그인"
+    error: "사용자 이름 또는 비밀번호가 올바르지 않습니다"
+    logout: "로그아웃"
+    registerTitle: "회원가입"
+    register: "가입"
+    success: "로그인되었습니다!"
+    loggedout: "로그아웃되었습니다!"
+    confirmpassword: "비밀번호 확인"
+    disabled: "계정이 비활성화되었습니다. 자세한 정보는 시스템 관리자에게 문의하세요."
+  movies:
+    namesearch: "영화 제목:"
+    listing: "영화 목록"
+    search: "영화 검색"
+    popular: "인기 영화"
+    nomovies: "사용 가능한 영화가 없습니다."
+    noresults: "결과를 찾을 수 없습니다."
+    watched: "본 영화"
+  users:
+    welcome: "환영합니다"
+    list: "사용자 목록"
+    create: "사용자 생성"
+    update: "사용자 업데이트"
+    edit: "사용자 수정"
+    created: "사용자가 성공적으로 생성되었습니다."
+    edited: "사용자가 성공적으로 수정되었습니다."
+    deleted: "사용자가 성공적으로 삭제되었습니다."
+    admin: "관리자"
+    backtolisting: "사용자 목록으로 돌아가기"
+    ratedmovies: "당신이 평가한 영화:"
+    your_rating: "당신의 평가:"
+    rating: "평점:"
+    total_users: "총 사용자 수:"
+    no_ratings: "아직 평가한 영화가 없습니다."
+  edit: "수정"
+  delete: "삭제"
+  ratings: "평점"
+  pagination:
+    previous: "이전"
+    next: "다음"
+    page: "페이지"
+  search: "검색"
+  errors:
+    not_authorized: "권한이 없습니다"
+    attributes:
+      username:
+        taken: "이미 사용 중인 사용자 이름입니다."
+      password:
+        too_short: "비밀번호는 최소 8자여야 합니다."
+      password_confirmation:
+        confirmation: "비밀번호 확인이 일치하지 않습니다."
+  confirmation: "정말 진행하시겠습니까?"
+  stars: "별"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "검증 실패: %{errors}"

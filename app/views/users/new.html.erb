@@ -1,0 +1,45 @@
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag :users, "data-turbo-track": "reload" %>
+<% end %>
+
+<h1><%= t("login.registerTitle") %></h1>
+
+<% if @user.errors.any? %>
+  <div class="errors">
+    <ul>
+      <% @user.errors.messages.each do |attr, messages| %>
+        <% messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @user, data: { turbo: false }, local: true do |form| %>
+  <p>
+    <%= form.label t("login.username") %><br>
+    <%= form.text_field :username, required: true %>
+  </p>
+
+  <p>
+    <%= form.label t("login.password") %><br>
+    <%= form.password_field :password, required: true %>
+  </p>
+
+  <p>
+    <%= form.label t("login.confirmpassword") %><br>
+    <%= form.password_field :password_confirmation, required: true %>
+  </p>
+
+  <% if admin? %>
+        <div>
+            <%= form.label :admin, t("users.admin") %>
+            <%= form.check_box :admin %>
+        </div>
+    <% end %>
+
+  <p>
+    <%= form.submit t("login.register") %>
+  </p>
+<% end %>

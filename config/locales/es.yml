@@ -1,0 +1,63 @@
+es:
+  welcome: "Bienvenido a Cinemarx"
+  login:
+    title: "Iniciar Sesión"
+    username: "Nombre de usuario"
+    password: "Contraseña"
+    submit: "Iniciar Sesión"
+    error: "Usuario o contraseña incorrectos"
+    logout: "Cerrar Sesión"
+    registerTitle: "Registro"
+    register: "Registrarse"
+    success: "¡Sesión iniciada!"
+    loggedout: "¡Sesión cerrada!"
+    confirmpassword: "Confirmar contraseña"
+    disabled: "Tu cuenta está deshabilitada, contacta a tu administrador para más información."
+  movies:
+    namesearch: "Nombre de la película:"
+    listing: "Listado de Películas"
+    search: "Buscar Películas"
+    popular: "Películas Populares"
+    nomovies: "No hay películas disponibles."
+    noresults: "No se encontraron resultados."
+    watched: "Películas vistas:"
+  users:
+    welcome: "Bienvenido"
+    list: "Listado de Usuarios"
+    create: "Crear Usuarios"
+    update: "Actualizar Usuario"
+    edit: "Editar Usuario"
+    created: "Usuario creado exitosamente."
+    edited: "Usuario editado exitosamente."
+    deleted: "Usuario eliminado exitosamente."
+    admin: "Administrador"
+    backtolisting: "Volver al listado de usuarios"
+    ratedmovies: "Películas que has calificado:"
+    your_rating: "Tu calificación:"
+    rating: "Calificación:"
+    total_users: "Usuarios totales:"
+    no_ratings: "Aún no has calificado ninguna película."
+    enabled: "Habilitado:"
+  edit: "Editar"
+  delete: "Eliminar"
+  ratings: "Valoraciones"
+  pagination:
+    previous: "Anterior"
+    next: "Siguiente"
+    page: "Página"
+  search: "Buscar"
+  errors:
+    not_authorized: "No autorizado"
+    attributes:
+      username:
+        taken: "Nombre de usuario ya en uso."
+      password:
+        too_short: "La contraseña debe tener mínimo 8 carácteres."
+      password_confirmation:
+        confirmation: "Las contraseñas no coinciden"
+  confirmation: "¿Estás seguro?"
+  stars: "estrellas"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "La validación falló: %{errors}"

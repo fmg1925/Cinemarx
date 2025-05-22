@@ -1,0 +1,63 @@
+en:
+  welcome: "Welcome to Cinemarx"
+  login:
+    title: "Login"
+    username: "Username"
+    password: "Password"
+    submit: "Sign In"
+    error: "Invalid username or password"
+    logout: "Logout"
+    registerTitle: "Register"
+    register: "Register"
+    success: "Logged in!"
+    loggedout: "Logged out!"
+    confirmpassword: "Password confirmation"
+    disabled: "Your account is disabled, contact your system administrator for more information."
+  movies:
+    namesearch: "Movie name:"
+    listing: "Movies Listing"
+    search: "Movies Search"
+    popular: "Popular Movies"
+    nomovies: "No movies available."
+    noresults: "No results found."
+    watched: "Watched movies:"
+  users:
+    welcome: "Welcome"
+    list: "Users Listing"
+    create: "Users Create"
+    update: "Update User"
+    edit: "Edit User"
+    created: "User created succesfully."
+    edited: "User edited succesfully."
+    deleted: "User deleted succesfully."
+    admin: "Administrator"
+    backtolisting: "Go back to user listing"
+    ratedmovies: "Your rated movies:"
+    your_rating: "Your rating:"
+    rating: "Rating:"
+    total_users: "Total users:"
+    no_ratings: "You haven't rated any movies yet."
+    enabled: "Enabled:"
+  edit: "Edit"
+  delete: "Delete"
+  ratings: "Ratings"
+  pagination:
+    previous: "Previous"
+    next: "Next"
+    page: "Page"
+  search: "Search"
+  errors:
+    not_authorized: "Not authorized"
+    attributes:
+      username:
+        taken: "Username already taken."
+      password:
+        too_short: "Password must be at least 8 characters."
+      password_confirmation:
+        confirmation: "Password confirmation does not match."
+  confirmation: "Are you sure?"
+  stars: "stars"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Validation failed: %{errors}"

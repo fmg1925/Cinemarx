@@ -1,0 +1,14 @@
+<div class="movie">
+  <div class="movie-left">
+    <%= image_tag(movie['poster_path'] ? "https://image.tmdb.org/t/p/w500#{movie['poster_path']}" : asset_path('placeholder.png'), class: "movie-poster", onclick: "postToStoreMovies({ id: '#{movie["id"]}', title: '#{j movie["title"]}', overview: '#{j movie["overview"]}', poster_path: '#{movie["poster_path"]}', combined_rating: '#{movie["combined_rating"]}' })") %>
+  </div>
+  <div class="movie-details">
+    <strong><%= movie['title'] %></strong><br>
+    <%= movie['overview'] %><br>
+  </div>
+  <% if movie["user_score"].present? %>
+    <p><%= t("users.your_rating") %> <%= movie["user_score"] %> <%= t("stars") %></p>
+    <p><%= t("users.rating") %> <%= movie["combined_rating"] %> / 5</p>
+    <p><%= t("users.total_users") %> <%= movie["user_count"] %></p>
+  <% end %>
+</div>

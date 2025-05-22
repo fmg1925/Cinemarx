@@ -1,0 +1,44 @@
+<h1><%= t("users.edit") %></h1>
+
+<% if @user.errors.any? %>
+  <div class="errors">
+    <ul>
+      <% @user.errors.messages.each do |attr, messages| %>
+        <% messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @user, local: true do |f| %>
+  <div>
+    <%= f.label t("login.username") %>
+    <%= f.text_field :username, required: true %>
+  </div>
+
+  <div>
+    <%= f.label t("login.password") %>
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div>
+    <%= f.label t("login.confirmpassword") %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div>
+  <%= f.label :enabled, t("users.enabled") %>
+  <%= f.check_box :enabled %>
+  </div>
+
+  <div>
+  <%= f.label :admin, t("users.admin") %>
+  <%= f.check_box :admin %>
+  </div>
+
+  <%= f.submit t("users.update") %>
+<% end %>
+
+<%= link_to t("users.backtolisting"), users_path %>

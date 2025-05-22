@@ -1,0 +1,37 @@
+<!-- app/views/home/index.html.erb --> <!-- Página principal -->
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag :movies, "data-turbo-track": "reload" %>
+<% end %>
+
+<% if logged_in? %>
+  <h2><%= t("welcome") %>, <%= current_user.username %></h2>
+<% else %>
+  <h2><%= t("welcome") %></h2>
+<% end %>
+
+<% if logged_in? %> <!-- Si el usuario está logeado -->
+  <% if @rated_movies.present? %>
+    <h3><%= t("users.ratedmovies") %></h3>
+    <div id="rated_movies">
+      <%= render 'home/rated_movies', rated_movies: @rated_movies %>
+    </div>
+  <% else %>
+    <p><%= t("users.no_ratings") %></p>
+  <% end %>
+  
+  <% if @watched_movies.present? %>
+    <h3><%= t("movies.watched") %></h3>
+    <div id="watched_movies">
+      <%= render 'home/watched_movies', watched_movies: @watched_movies %>
+    </div>
+  <% end %>
+<% else %>
+  <%= link_to t("login.title"), login_path %>
+  <%= link_to t("login.register"), new_user_path%>
+<% end %>
+
+<script>
+  document.addEventListener("turbo:frame-load", function(event) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
