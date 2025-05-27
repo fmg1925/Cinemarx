@@ -76,6 +76,6 @@ Este proyecto utiliza **Sidekiq** para ejecutar tareas en segundo plano.
 
 8. **Visita `http://localhost:3000` en tu navegador.**
 
-Usuario de Ejemplo:\
-    **Nombre de Usuario:** admin\
-    **Contraseña:** secret12
+Usuario de Ejemplo:
+**Nombre de Usuario:** admin
+**Contraseña:** secret12
