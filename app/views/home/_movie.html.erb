@@ -1,6 +1,21 @@
 <div class="movie">
   <div class="movie-left">
-    <%= image_tag(movie['poster_path'] ? "https://image.tmdb.org/t/p/w500#{movie['poster_path']}" : asset_path('placeholder.png'), class: "movie-poster", onclick: "postToStoreMovies({ id: '#{movie["id"]}', title: '#{j movie["title"]}', overview: '#{j movie["overview"]}', poster_path: '#{movie["poster_path"]}', combined_rating: '#{movie["combined_rating"]}' })") %>
+    <%= form_tag store_movies_path, method: :post, data: { turbo: false } do %>
+    <%= hidden_field_tag 'movie[id]', movie['id'] %>
+    <%= hidden_field_tag 'movie[title]', movie['title'] %>
+    <%= hidden_field_tag 'movie[overview]', movie['overview'] %>
+    <%= hidden_field_tag 'movie[poster_path]', movie['poster_path'] %>
+    <%= hidden_field_tag 'movie[vote_count]', movie['vote_count'] %>
+    <%= hidden_field_tag 'movie[combined_rating]', movie['combined_rating'] %>
+    <%= hidden_field_tag 'movie[user_count]', movie['user_count'] %>
+
+    <%= button_tag type: 'submit', style: "background:none; border:none; padding:0;" do %>
+      <%= image_tag(
+        movie['poster_path'] ? "https://image.tmdb.org/t/p/w500#{movie['poster_path']}" : asset_path('placeholder.png'),
+        class: "movie-poster"
+      ) %>
+    <% end %>
+  <% end %>
   </div>
   <div class="movie-details">
     <strong><%= movie['title'] %></strong><br>

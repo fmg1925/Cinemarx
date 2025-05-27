@@ -1,0 +1,36 @@
+<div class="movie">
+  <div class="movie-left">
+    <% user_rating = current_user&.ratings&.find_by(movie_id: movie['id'])&.score || 0 %>
+    <% favorite = current_user&.favorite_movies&.find_by(movie_id: movie['id']) || false %>
+    <div class="poster-wrapper" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>" vote_average="<%= movie['vote_average'] %>" vote_count="<%= movie['vote_count'] %>">
+      <%= image_tag(movie['poster_path'] ? "https://image.tmdb.org/t/p/w500#{movie['poster_path']}" : asset_path('placeholder.png'), class: "movie-poster", onclick: "postToStoreMovies({ id: '#{movie["id"]}', title: '#{j movie["title"]}', overview: '#{j movie["overview"]}', poster_path: '#{movie["poster_path"]}', vote_count: '#{movie["vote_count"]}', combined_rating: '#{movie["combined_rating"]}', user_count: '#{movie["vote_count"] + movie["user_count"]}' })") %>
+      <%= button_tag(favorite ? '💛' : '❤️', class: "poster-button", type: 'button') %>
+    </div>
+    <div class="movie-rating" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>" vote_average="<%= movie['vote_average'] %>" vote_count="<%= movie['vote_count'] %>">
+      <% combined_rating = (movie['combined_rating'] || 0).to_f %>
+
+      <% 1.upto(5) do |i| %>
+        <% star_class = 
+          if combined_rating >= i
+            "fa-solid"
+          elsif combined_rating >= i - 0.5
+            "fa-solid fa-star-half-stroke"
+          else
+            "fa-regular"
+          end
+        %>
+        <% star_color = (user_rating >= i - 0.5) ? "color: #8FD053" : "" %>
+        <i class="fa-star <%= star_class %> star" style="<%= star_color %>" data-score="<%= i %>"></i>
+      <% end %>
+      <br>
+      <span class="rating-score">
+        <%= number_with_precision(combined_rating, precision: 1) %> / 5 (<%= movie['vote_count'] + movie['user_count'] %> <%= t("ratings") %>)
+      </span>
+    </div>
+  </div>
+
+  <div class="movie-details">
+    <strong><%= movie['title'] %></strong><br>
+    <%= movie['overview'] %><br>
+  </div>
+</div>

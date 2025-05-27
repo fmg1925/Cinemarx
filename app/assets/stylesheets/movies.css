@@ -15,11 +15,33 @@
   flex-shrink: 0; /* para que no se achique */
 }
 
+.poster-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .movie-poster {
   width: 150px;
   border-radius: 8px;
   display: block;
   cursor: pointer;
+}
+
+.poster-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.poster-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .movie-rating {
@@ -48,3 +70,13 @@ a.movie-card {
   cursor: pointer;
  }
 
+ .movie-details-poster img {
+  width: 300px;
+  height: 500px;
+  float: left;
+  margin-right: 15px;
+ }
+
+ .movie-details-info {
+  overflow: hidden;
+ }

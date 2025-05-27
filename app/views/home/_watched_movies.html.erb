@@ -1,7 +1,8 @@
 <turbo-frame id="watched_movies_frame">
-  <%= render partial: "movie", collection: watched_movies, as: :movie rescue nil %>
+  <%= render partial: "movie", collection: watched_movies, as: :movie %>
 
-  <% if watched_movies.size == 10 %>
-    <%= link_to t("Mostrar más"), home_path(page: (params[:page] || 1).to_i + 1), data: { turbo_frame: "watched_movies_frame" }, class: "btn btn-primary" %>
+  <% page = (params[:page].presence || 1).to_i %>
+  <% if watched_movies.size == 10 && current_user.watched_movies.count > 10 * page %>
+    <%= link_to t("showmore"), home_path(page: (params[:page] || 1).to_i + 1), data: { turbo_frame: "watched_movies_frame" }, class: "btn btn-primary" %>
   <% end %>
 </turbo-frame>

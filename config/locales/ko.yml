@@ -37,6 +37,7 @@ ko:
     rating: "평점:"
     total_users: "총 사용자 수:"
     no_ratings: "아직 평가한 영화가 없습니다."
+    enabled: "활성화됨:"
   edit: "수정"
   delete: "삭제"
   ratings: "평점"
@@ -60,3 +61,4 @@ ko:
     errors:
       messages:
         record_invalid: "검증 실패: %{errors}"
+  showmore: "더 보기"

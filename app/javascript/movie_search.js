@@ -1,6 +1,7 @@
 // app/javascript/movie_search.js
 
-document.addEventListener("DOMContentLoaded", function () { // Cuando se cargue el DOM
+document.addEventListener("DOMContentLoaded", function () {
+  // Cuando se cargue el DOM
   const params = new URLSearchParams(window.location.search); // Conseguir la búsqueda de la URL
   const query = params.get("query");
   if (query) {

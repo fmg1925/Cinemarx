@@ -37,6 +37,7 @@ zh:
     rating: "评分："
     total_users: "用户总数："
     no_ratings: "你还没有给任何电影评分。"
+    enabled: "已启用："
   edit: "编辑"
   delete: "删除"
   ratings: "评分"
@@ -60,3 +61,4 @@ zh:
     errors:
       messages:
         record_invalid: "验证失败：%{errors}"
+  showmore: "显示更多"

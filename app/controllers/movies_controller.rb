@@ -110,7 +110,8 @@ class MoviesController < ApplicationController
   end
 
   def store
-    session[:movie] = params[:movie]
+    movie_data = params.require(:movie).permit(:id, :title, :overview, :poster_path, :vote_count, :combined_rating, :user_count).to_h
+    session[:movie] = movie_data
     redirect_to details_movies_path
   end
 

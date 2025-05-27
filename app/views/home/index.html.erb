@@ -10,12 +10,19 @@
 <% end %>
 
 <% if logged_in? %> <!-- Si el usuario está logeado -->
+  <% if @favorite_movies.present? %>
+    <h3><%= t("users.favoritemovies") %></h3>
+    <div id="favorite_movies">
+      <%= render 'home/favorite_movies', favorite_movies: @favorite_movies %>
+    </div>
+  <% end %>
+
   <% if @rated_movies.present? %>
     <h3><%= t("users.ratedmovies") %></h3>
     <div id="rated_movies">
       <%= render 'home/rated_movies', rated_movies: @rated_movies %>
     </div>
-  <% else %>
+  <% elsif !@favorite_movies.present? %>
     <p><%= t("users.no_ratings") %></p>
   <% end %>
   

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get "/logout", to: "sessions#destroy"
 
   resources :ratings, only: [ :create ]
+  resources :favorites, only: [ :create, :destroy ]
 
   get "rated_movies", to: "movies#rated_movies"
 

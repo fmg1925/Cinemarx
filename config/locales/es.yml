@@ -38,9 +38,10 @@ es:
     total_users: "Usuarios totales:"
     no_ratings: "Aún no has calificado ninguna película."
     enabled: "Habilitado:"
+    favoritemovies: "Tus películas favoritas:"
   edit: "Editar"
   delete: "Eliminar"
-  ratings: "Valoraciones"
+  ratings: "Calificaciones"
   pagination:
     previous: "Anterior"
     next: "Siguiente"
@@ -52,12 +53,13 @@ es:
       username:
         taken: "Nombre de usuario ya en uso."
       password:
-        too_short: "La contraseña debe tener mínimo 8 carácteres."
+        too_short: "La contraseña debe contener mínimo 8 carácteres."
       password_confirmation:
-        confirmation: "Las contraseñas no coinciden"
+        confirmation: "Las contraseñas no coinciden."
   confirmation: "¿Estás seguro?"
   stars: "estrellas"
   activerecord:
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"
+  showmore: "Mostrar más"

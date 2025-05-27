@@ -23,7 +23,9 @@ class ApplicationController < ActionController::Base
   end
 
   def enabled?
-    current_user&.enabled?
+    unless current_user&.enabled?
+      reset_session
+    end
   end
 
   def admin?

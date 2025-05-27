@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Movie Lister" %></title>
+    <title><%= content_for(:title) || "Cinemarx" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -21,9 +21,9 @@
 
   <body>
     <header>
-      <%= link_to 'Cinemarx', home_path, id: "title" %><br>
-      <%= link_to t("movies.popular"), movies_path, class: "header-links" %>
-      <%= link_to t("movies.search"), search_movies_path, class: "header-links" %>
+      <%= link_to 'Cinemarx', home_path, id: "title", data: { turbo: false } %><br>
+      <%= link_to t("movies.popular"), movies_path, class: "header-links", data: { turbo: false } %>
+      <%= link_to t("movies.search"), search_movies_path, class: "header-links", data: { turbo: false } %>
 
       <% if !logged_in? %>
       <%= link_to t("login.title"), login_path, class: "header-links" %>

@@ -3,6 +3,6 @@
 
   <% page = (params[:page].presence || 1).to_i %>
   <% if rated_movies.size == 10 && current_user.ratings.count > 10 * page %>
-    <%= link_to t("Mostrar más"), home_path(page: (params[:page] || 1).to_i + 1), data: { turbo_frame: "rated_movies_frame" }, class: "btn btn-primary" %>
+    <%= link_to t("showmore"), home_path(page: (params[:page] || 1).to_i + 1), data: { turbo_frame: "rated_movies_frame" }, class: "btn btn-primary" %>
   <% end %>
 </turbo-frame>

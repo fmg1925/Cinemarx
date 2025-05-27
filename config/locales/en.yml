@@ -38,6 +38,7 @@ en:
     total_users: "Total users:"
     no_ratings: "You haven't rated any movies yet."
     enabled: "Enabled:"
+    favoritemovies: "Your favorite movies:"
   edit: "Edit"
   delete: "Delete"
   ratings: "Ratings"
@@ -61,3 +62,4 @@ en:
     errors:
       messages:
         record_invalid: "Validation failed: %{errors}"
+  showmore: "Show more"
