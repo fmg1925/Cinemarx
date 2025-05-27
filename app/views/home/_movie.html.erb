@@ -5,9 +5,10 @@
     <%= hidden_field_tag 'movie[title]', movie['title'] %>
     <%= hidden_field_tag 'movie[overview]', movie['overview'] %>
     <%= hidden_field_tag 'movie[poster_path]', movie['poster_path'] %>
+    <%= hidden_field_tag 'movie[vote_average]', movie['vote_average'] %>
     <%= hidden_field_tag 'movie[vote_count]', movie['vote_count'] %>
-    <%= hidden_field_tag 'movie[combined_rating]', movie['combined_rating'] %>
-    <%= hidden_field_tag 'movie[user_count]', movie['user_count'] %>
+    <%= hidden_field_tag 'movie[rating]', movie['rating'] %>
+    <%= hidden_field_tag 'movie[total_votes]', movie['total_votes'] %>
 
     <%= button_tag type: 'submit', style: "background:none; border:none; padding:0;" do %>
       <%= image_tag(
@@ -23,7 +24,7 @@
   </div>
   <% if movie["user_score"].present? %>
     <p><%= t("users.your_rating") %> <%= movie["user_score"] %> <%= t("stars") %></p>
-    <p><%= t("users.rating") %> <%= movie["combined_rating"] %> / 5</p>
-    <p><%= t("users.total_users") %> <%= movie["user_count"] %></p>
+    <p><%= t("users.rating") %> <%= movie["rating"] %> / 5</p>
+    <p><%= t("users.total_users") %> <%= movie["total_votes"] %></p>
   <% end %>
 </div>

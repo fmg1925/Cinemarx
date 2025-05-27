@@ -1,36 +1,3 @@
-function postToStoreMovies(movie) {
-  // Crear formulario
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = "/movies/store";
-  form.style.display = "none";
-
-  // Agregar token CSRF
-  const csrfToken = document
-    .querySelector('meta[name="csrf-token"]')
-    .getAttribute("content");
-  const csrfInput = document.createElement("input");
-  csrfInput.type = "hidden";
-  csrfInput.name = "authenticity_token";
-  csrfInput.value = csrfToken;
-  form.appendChild(csrfInput);
-
-  // Agregar parámetros movie (como campos ocultos)
-  for (const key in movie) {
-    if (movie.hasOwnProperty(key)) {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = `movie[${key}]`;
-      input.value = movie[key];
-      form.appendChild(input);
-    }
-  }
-
-  // Añadir el formulario al body y enviarlo
-  document.body.appendChild(form);
-  form.submit();
-}
-
 document.addEventListener("turbo:load", () => {
   // Cuando cargue la página
   const stars = document.querySelectorAll(".star"); // Conseguir las estrellas
@@ -48,9 +15,9 @@ document.addEventListener("turbo:load", () => {
       const poster_path =
         event.target.parentElement.getAttribute("poster_path");
       const tmdb_vote_average =
-        event.target.parentElement.getAttribute("vote_average");
+        event.target.parentElement.getAttribute("vote-average");
       const tmdb_vote_count =
-        event.target.parentElement.getAttribute("vote_count");
+        event.target.parentElement.getAttribute("vote-count");
       const movieId = event.target.parentElement.dataset.movieId; // Conseguir la id de la película
       fetch("/ratings", {
         // Enviar a la base de datos
@@ -89,7 +56,7 @@ document.addEventListener("turbo:load", () => {
           if (data) {
             const ratingDiv = document.querySelector(
               // Conseguir el contenedor del rating de la película
-              `.movie-rating[data-movie-id="${movieId}"]`
+              `.movie-details-rating[data-movie-id="${movieId}"]`
             );
             if (ratingDiv) {
               const voteAverageRaw = ratingDiv.getAttribute("vote-average");
@@ -116,7 +83,38 @@ document.addEventListener("turbo:load", () => {
                 estrella.style.color = index < score ? "#ffae10" : "";
               });
             }
-          }
+          }function postToStoreMovies(movie) {
+  // Crear formulario
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "/movies/store";
+  form.style.display = "none";
+
+  // Agregar token CSRF
+  const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute("content");
+  const csrfInput = document.createElement("input");
+  csrfInput.type = "hidden";
+  csrfInput.name = "authenticity_token";
+  csrfInput.value = csrfToken;
+  form.appendChild(csrfInput);
+
+  // Agregar parámetros movie (como campos ocultos)
+  for (const key in movie) {
+    if (movie.hasOwnProperty(key)) {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = `movie[${key}]`;
+      input.value = movie[key];
+      form.appendChild(input);
+    }
+  }
+
+  // Añadir el formulario al body y enviarlo
+  document.body.appendChild(form);
+  form.submit();
+}
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);

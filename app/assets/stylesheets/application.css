@@ -9,29 +9,53 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
-  * {
-      color: #2C1001;
+  * { /* Color de las letras */
+    color: #ecf1f2;
+    text-shadow:
+      -0.5px -1px 0 black,
+      0.5px -1px 0 black,
+      -0.5px  1px 0 black,
+      0.5px  1px 0 black;
   }
   
-  body {
-      background: #02907D;
+  body { /* Color de fondo */
+    background: #1a1c20;
+    padding: 0;
+    margin: 0;
+  }
+
+  header {
+    background: linear-gradient(#f83646, #1a1c20);
+    padding-left: 5px;
+    padding-bottom: 20px;
+  }
+
+  main {
+    margin-top: -20px;
+    margin-left: 10px;
+  }
+
+  h1, h2, h3 {
+    text-shadow:
+      -1.5px -1px 0 black,
+      1.5px -1px 0 black,
+      -1.5px  1px 0 black,
+      1.5px  1px 0 black;
   }
 
   input, button {
-    color: black;
     border: none;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(248, 54, 70, 0.7);
     border-radius: 3px;
     padding: 2px;
     margin: 2px;
   }
 
-
   #title {
     font-size: 3rem;
-    margin-left: 5px;
     margin-bottom: 5px;
     text-decoration: none;
+    text-shadow: 2px 2px 1px black;
   }
 
   .header-links {
@@ -41,7 +65,7 @@
     height: auto;
     width: 30px;
     padding: 2px;
-    background-color: rgba(3, 69, 61, 0.4);
+    background-color: #222a31;
   }
 
   #language-dropdown {
@@ -52,14 +76,39 @@
   }
 
   #language-dropdown select {
-   color: #2C1001;
    font-size: 16px;
-   background-color: rgba(214, 206, 139, 0.5);
+   background-color: #640500;
    border-radius: 5px;
    border: none;
    padding: 2px 6px;
    height: 100%;
    margin: 2px 0;
+  }
+
+  #title {
+    margin: 0;
+  }
+
+  table {
+    border: 2px solid #f83646;
+    border-radius: 5px;
+    padding: 2px;
+  }
+
+  td {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  td * {
+    padding-right: 5px;
+  }
+
+  td input {
+    padding-left: 5px;
+  }
+
+  a {
+    text-decoration: none;
   }
 
   @media only screen and (max-width:700px) {

@@ -29,8 +29,8 @@ class MoviesController < ApplicationController
           combined = tmdb_rating_5
         end
 
-        movie["user_count"] = user_count
-        movie["combined_rating"] = combined.round(2)
+        movie["rating"] = combined.round(2)
+        movie["total_votes"] = total_votes
       end
       @total_pages = response.parsed_response["total_pages"]
       @current_page = page.to_i
@@ -58,22 +58,26 @@ class MoviesController < ApplicationController
     if response.success?
        @movies = response.parsed_response["results"]
         @movies.each do |movie|
+          tmdb_rating_5 = movie["vote_average"].to_f / 2.0
+          tmdb_votes = movie["vote_count"].to_i rescue 0
+
           user_ratings = Rating.where(movie_id: movie["id"])
           user_avg = user_ratings.average(:score) || 0
           user_count = user_ratings.count
 
-          total_votes = (movie["vote_count"] || 0) + user_count
+          total_votes = tmdb_votes + user_count
 
           if total_votes > 0
-            combined = ((movie["vote_average"] / 2.0) * movie["vote_count"] + user_avg * user_count) / total_votes
+            combined = ((tmdb_rating_5 * tmdb_votes) + (user_avg * user_count)) / total_votes
           else
-            combined = (movie["vote_average"] || 0) / 2.0
+            combined = tmdb_rating_5
           end
 
-          movie["user_count"] = user_count
-          movie["combined_rating"] = combined.round(2)
+          movie["rating"] = combined.round(2)
+          movie["total_votes"]
+
           cache_movie_data(movie, current_language_code)
-      end
+        end
       @total_pages = response.parsed_response["total_pages"]
       @current_page = page.to_i
     else
@@ -110,7 +114,7 @@ class MoviesController < ApplicationController
   end
 
   def store
-    movie_data = params.require(:movie).permit(:id, :title, :overview, :poster_path, :vote_count, :combined_rating, :user_count).to_h
+    movie_data = params.require(:movie).permit(:id, :title, :overview, :poster_path, :vote_average, :vote_count, :rating, :total_votes).to_h
     session[:movie] = movie_data
     redirect_to details_movies_path
   end

@@ -16,30 +16,31 @@
   </div>
 <% end %>
 
+<table>
 <%= form_with model: @user, data: { turbo: false }, local: true do |form| %>
-  <p>
-    <%= form.label t("login.username") %><br>
-    <%= form.text_field :username, required: true %>
-  </p>
-
-  <p>
-    <%= form.label t("login.password") %><br>
-    <%= form.password_field :password, required: true %>
-  </p>
-
-  <p>
-    <%= form.label t("login.confirmpassword") %><br>
-    <%= form.password_field :password_confirmation, required: true %>
-  </p>
-
+<tr>
+    <td><%= form.label t("login.username") %></td>
+    <td><%= form.text_field :username, required: true %></td>
+</tr>
+<tr>
+    <td><%= form.label t("login.password") %></td>
+    <td><%= form.password_field :password, required: true %></td>
+</tr>
+<tr>
+  <td><%= form.label t("login.confirmpassword") %></td>
+  <td><%= form.password_field :password_confirmation, required: true %></td>
+</tr>
+<tr>
   <% if admin? %>
-        <div>
-            <%= form.label :admin, t("users.admin") %>
-            <%= form.check_box :admin %>
-        </div>
-    <% end %>
-
-  <p>
-    <%= form.submit t("login.register") %>
-  </p>
+    <tr>
+      <td><%= form.label :admin, t("users.admin") %></td>
+      <td><%= form.check_box :admin %></td>
+    <tr>
+  <% end %>
+</tr>
+<tr>
+  <td><%= form.submit t("login.register") %></td>
+  <td></td>
+</tr>
 <% end %>
+</table>

@@ -18,31 +18,31 @@
         <% if @movie["combined_rating"].present? %>
           <p><strong><%= t("movies.rating") %>:</strong> <%= number_with_precision(@movie["combined_rating"].to_f, precision: 1) %> / 5</p>
         <% end %>
-      </div>
 
       <% user_rating = current_user&.ratings&.find_by(movie_id: @movie['id'])&.score || 0 %>
       <% favorite = current_user&.favorite_movies&.find_by(movie_id: @movie['id']) || false %>
 
-      <div class="movie-rating" data-movie-id="<%= @movie["id"] %>" vote-count="<%= @movie['vote_count'] %>" vote-average="<%= @movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= @movie['title'] %>" overview="<%= @movie['overview'] %>" poster_path="<%= @movie['poster_path'] %>" vote_average="<%= @movie['vote_average'] %>" vote_count="<%= @movie['vote_count'] %>">
-      <% combined_rating = (@movie['combined_rating'] || 0).to_f %>
+      <div class="movie-details-rating" data-movie-id="<%= @movie["id"] %>" vote-count="<%= @movie['vote_count'] %>" vote-average="<%= @movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= @movie['title'] %>" overview="<%= @movie['overview'] %>" poster_path="<%= @movie['poster_path'] %>">
+      <% rating = (@movie['rating'] || 0).to_f %>
 
       <% 1.upto(5) do |i| %>
         <% star_class = 
-          if combined_rating >= i
+          if rating >= i
             "fa-solid"
-          elsif combined_rating >= i - 0.5
+          elsif rating >= i - 0.5
             "fa-solid fa-star-half-stroke"
           else
             "fa-regular"
           end
         %>
-        <% star_color = (user_rating >= i - 0.5) ? "color: #8FD053" : "" %>
+        <% star_color = (user_rating >= i - 0.5) ? "color: #ffae10" : "" %>
         <i class="fa-star <%= star_class %> star" style="<%= star_color %>" data-score="<%= i %>"></i>
       <% end %>
       <br>
       <span class="rating-score">
-        <%= number_with_precision(combined_rating, precision: 1) %> / 5 (<%= @movie['user_count'] %> <%= t("ratings") %>)
+        <%= number_with_precision(rating, precision: 1) %> / 5 (<%= @movie['total_votes'] %> <%= t("ratings") %>)
       </span>
+    </div>
     </div>
 
     </div>
@@ -53,4 +53,4 @@
   <p><%= t("movies.nomovieinfo") %></p>
 <% end %>
 
-<%= javascript_include_tag "movies", "data-turbo-track": "reload", defer: true %>
+<%= javascript_include_tag "movie_details", "data-turbo-track": "reload", defer: true %>

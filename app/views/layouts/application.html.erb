@@ -50,12 +50,14 @@
         <%= select_tag :locale, options_for_select([["English", "en"], ["Español", "es"], ["한국어", "ko"], ["中文", "zh"]], I18n.locale), onchange: "this.form.submit();" %>
       <% end %>
     </header>
+    <main>
     <% if flash[:notice] %> <!-- Mostrar errores y alertas en todas las páginas -->
       <p style="color: lime;"><%= flash[:notice] %></p>
     <% elsif flash[:alert] %>
       <p style="color: yellow;"><%= flash[:alert] %></p>
     <% end %>
     <%= yield %> <!-- Insertar body de la vista -->
+    </main>
     <script>
       document.addEventListener("turbo:load", () => { // Al cargar la página
         document.querySelectorAll(".confirm:not([data-confirm-processed])").forEach(element => { // Todos los elementos de clase confirm

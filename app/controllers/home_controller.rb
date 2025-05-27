@@ -14,10 +14,12 @@ class HomeController < ApplicationController
     watched = current_user.watched_movies.order(created_at: :desc)
 
     favorite_ids = favorites.pluck(:movie_id)
+    rating_ids = user_ratings.pluck(:movie_id)
 
     favoritemovies = favorites.map do |favoritemovie|
       cached = CachedMovie.find_by(movie_id: favoritemovie.movie_id, language: language)
       next unless cached
+
       tmdb_rating_5 = cached.vote_average.to_f / 2.0
       tmdb_votes = cached.vote_count.to_i rescue 0
 
@@ -33,8 +35,8 @@ class HomeController < ApplicationController
         "overview" => cached.overview,
         "poster_path" => cached.poster_path,
         "user_score" => rating&.score || nil,
-        "combined_rating" => combined.round(2),
-        "user_count" => total_votes
+        "rating" => combined.round(2),
+        "total_votes" => total_votes
       }
     end.compact
 
@@ -58,19 +60,31 @@ class HomeController < ApplicationController
         "overview" => cached.overview,
         "poster_path" => cached.poster_path,
         "user_score" => rating.score,
-        "combined_rating" => combined.round(2),
-        "user_count" => total_votes
+        "rating" => combined.round(2),
+        "total_votes" => total_votes
       }
     end.compact
 
-    watchedmovies = watched.map do |watchedmovie|
+    watchedmovies = watched.reject { |watchedmovie| rating_ids.include?(watchedmovie.movie_id) }.map do |watchedmovie|
       cached = CachedMovie.find_by(movie_id: watchedmovie.movie_id, language: language)
       next unless cached
+
+      tmdb_rating_5 = cached.vote_average.to_f / 2.0
+      tmdb_votes = cached.vote_count.to_i rescue 0
+
+      user_avg = Rating.where(movie_id: watchedmovie.movie_id).average(:score) || 0
+      user_count = Rating.where(movie_id: watchedmovie.movie_id).count
+      total_votes = tmdb_votes + user_count
+
+      combined = total_votes > 0 ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
+
       {
         "id" => watchedmovie.movie_id,
         "title" => cached.title,
         "overview" => cached.overview,
-        "poster_path" => cached.poster_path
+        "poster_path" => cached.poster_path,
+        "rating" => combined.round(2),
+        "total_votes" => total_votes
       }
     end.compact
 
