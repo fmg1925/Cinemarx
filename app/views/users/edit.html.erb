@@ -1,3 +1,7 @@
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag :users, "data-turbo-track": "reload" %>
+<% end %>
+
 <h1><%= t("users.edit") %></h1>
 
 <% if @user.errors.any? %>
@@ -12,33 +16,35 @@
   </div>
 <% end %>
 
+<table>
 <%= form_with model: @user, local: true do |f| %>
-  <div>
-    <%= f.label t("login.username") %>
-    <%= f.text_field :username, required: true %>
-  </div>
+  <tr>
+    <td><%= f.label t("login.username") %></td>
+    <td><%= f.text_field :username, required: true %></td>
+  </tr>
 
-  <div>
-    <%= f.label t("login.password") %>
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
+  <tr>
+    <td><%= f.label t("login.password") %></td>
+    <td><%= f.password_field :password, autocomplete: "new-password" %></td>
+  </tr>
 
-  <div>
-    <%= f.label t("login.confirmpassword") %>
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+  <tr>
+    <td><%= f.label t("login.confirmpassword") %></td>
+    <td><%= f.password_field :password_confirmation, autocomplete: "new-password" %></td>
+  </tr>
 
-  <div>
-  <%= f.label :enabled, t("users.enabled") %>
-  <%= f.check_box :enabled %>
-  </div>
-
-  <div>
-  <%= f.label :admin, t("users.admin") %>
-  <%= f.check_box :admin %>
-  </div>
-
-  <%= f.submit t("users.update") %>
+  <tr>
+    <td><%= f.label :enabled, t("users.enabled") %></td>
+    <td><%= f.check_box :enabled %></td>
+  </tr>
+  <tr>
+    <td><%= f.label :admin, t("users.admin") %>
+    <td><%= f.check_box :admin %>
+  </tr>
+  <tr>
+    <td><%= f.submit t("users.update") %></td>
+  </tr>
 <% end %>
-
-<%= link_to t("users.backtolisting"), users_path %>
+</table>
+<br>
+<%= link_to t("users.backtolisting"), users_path, id: "edit-button"%>

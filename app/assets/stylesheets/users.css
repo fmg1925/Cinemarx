@@ -1,12 +1,5 @@
-label {
-    margin-left: 5px;
-}
-
-input {
-    margin: 5px;
-}
-
-td {
-    margin: 5px;
-    padding: 2px;
+table * {
+    padding: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
 }

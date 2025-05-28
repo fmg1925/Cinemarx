@@ -35,6 +35,8 @@ class HomeController < ApplicationController
         "overview" => cached.overview,
         "poster_path" => cached.poster_path,
         "user_score" => rating&.score || nil,
+        "vote_average" => cached.vote_average.to_f,
+        "vote_count" => tmdb_votes,
         "rating" => combined.round(2),
         "total_votes" => total_votes
       }
@@ -60,6 +62,8 @@ class HomeController < ApplicationController
         "overview" => cached.overview,
         "poster_path" => cached.poster_path,
         "user_score" => rating.score,
+        "vote_average" => cached.vote_average.to_f,
+        "vote_count" => tmdb_votes,
         "rating" => combined.round(2),
         "total_votes" => total_votes
       }
@@ -83,6 +87,8 @@ class HomeController < ApplicationController
         "title" => cached.title,
         "overview" => cached.overview,
         "poster_path" => cached.poster_path,
+        "vote_average" => cached.vote_average.to_f,
+        "vote_count" => tmdb_votes,
         "rating" => combined.round(2),
         "total_votes" => total_votes
       }

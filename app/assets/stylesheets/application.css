@@ -64,7 +64,7 @@
     border-radius: 5px;
     height: auto;
     width: 30px;
-    padding: 2px;
+    padding: 3px;
     background-color: #222a31;
   }
 
@@ -103,12 +103,18 @@
     padding-right: 5px;
   }
 
-  td input {
+  td input, td a {
     padding-left: 5px;
   }
 
-  a {
+  a:not(#title, .header-links) {
     text-decoration: none;
+    background: rgba(248, 54, 70, 0.7);
+    padding: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 2px;
+    border-radius: 3px;
   }
 
   @media only screen and (max-width:700px) {

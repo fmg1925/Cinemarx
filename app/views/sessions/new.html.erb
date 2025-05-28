@@ -3,11 +3,11 @@
 <table>
 <%= form_with model: User.new, url: login_path, data: { turbo: false }, local: true do |form| %>
 <tr>
-    <td><%= form.label t("login.username") %></td><br>
+    <td><%= form.label t("login.username") %></td>
     <td><%= form.text_field :username %></td>
 </tr>
 <tr>
-    <td><%= form.label t("login.password") %></td><br>
+    <td><%= form.label t("login.password") %></td>
     <td><%= form.password_field :password %></td>
 </tr>
     <td><%= form.submit t("login.submit") %></td>

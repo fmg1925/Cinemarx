@@ -74,7 +74,7 @@ class MoviesController < ApplicationController
           end
 
           movie["rating"] = combined.round(2)
-          movie["total_votes"]
+          movie["total_votes"] = total_votes
 
           cache_movie_data(movie, current_language_code)
         end

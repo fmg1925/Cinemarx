@@ -38,6 +38,7 @@ ko:
     total_users: "총 사용자 수:"
     no_ratings: "아직 평가한 영화가 없습니다."
     enabled: "활성화됨:"
+    favoritemovies: "당신이 좋아하는 영화:"
   edit: "수정"
   delete: "삭제"
   ratings: "평점"

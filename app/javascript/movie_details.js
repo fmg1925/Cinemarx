@@ -83,38 +83,39 @@ document.addEventListener("turbo:load", () => {
                 estrella.style.color = index < score ? "#ffae10" : "";
               });
             }
-          }function postToStoreMovies(movie) {
-  // Crear formulario
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = "/movies/store";
-  form.style.display = "none";
+          }
+          function postToStoreMovies(movie) {
+            // Crear formulario
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/movies/store";
+            form.style.display = "none";
 
-  // Agregar token CSRF
-  const csrfToken = document
-    .querySelector('meta[name="csrf-token"]')
-    .getAttribute("content");
-  const csrfInput = document.createElement("input");
-  csrfInput.type = "hidden";
-  csrfInput.name = "authenticity_token";
-  csrfInput.value = csrfToken;
-  form.appendChild(csrfInput);
+            // Agregar token CSRF
+            const csrfToken = document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content");
+            const csrfInput = document.createElement("input");
+            csrfInput.type = "hidden";
+            csrfInput.name = "authenticity_token";
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
 
-  // Agregar parámetros movie (como campos ocultos)
-  for (const key in movie) {
-    if (movie.hasOwnProperty(key)) {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = `movie[${key}]`;
-      input.value = movie[key];
-      form.appendChild(input);
-    }
-  }
+            // Agregar parámetros movie (como campos ocultos)
+            for (const key in movie) {
+              if (movie.hasOwnProperty(key)) {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = `movie[${key}]`;
+                input.value = movie[key];
+                form.appendChild(input);
+              }
+            }
 
-  // Añadir el formulario al body y enviarlo
-  document.body.appendChild(form);
-  form.submit();
-}
+            // Añadir el formulario al body y enviarlo
+            document.body.appendChild(form);
+            form.submit();
+          }
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -132,15 +133,15 @@ document.addEventListener("turbo:load", () => {
     boton.addEventListener("click", (event) => {
       if (isSendingFavorite) return;
       isSendingFavorite = true;
-      const movieId = event.target.parentElement.dataset.movieId;
-      const title = event.target.parentElement.getAttribute("title");
-      const overview = event.target.parentElement.getAttribute("overview");
+      const movieId = event.target.parentElement.parentElement.dataset.movieId;
+      const title = event.target.parentElement.parentElement.getAttribute("title");
+      const overview = event.target.parentElement.parentElement.getAttribute("overview");
       const poster_path =
-        event.target.parentElement.getAttribute("poster_path");
+        event.target.parentElement.parentElement.getAttribute("poster_path");
       const tmdb_vote_average =
-        event.target.parentElement.getAttribute("vote_average");
+        event.target.parentElement.parentElement.getAttribute("vote_average");
       const tmdb_vote_count =
-        event.target.parentElement.getAttribute("vote_count");
+        event.target.parentElement.parentElement.getAttribute("vote_count");
       fetch("/favorites", {
         // Enviar a la base de datos
         method: "POST",
@@ -163,17 +164,11 @@ document.addEventListener("turbo:load", () => {
         }),
       })
         .then(async (response) => {
-          const contentType = response.headers.get("content-type");
-          if (
-            !response.ok ||
-            !contentType ||
-            !contentType.includes("application/json")
-          ) {
+          if (response.redirected) {
             window.location.href = "/login";
             return;
           }
           const data = await response.json();
-          console.log("Respuesta: ", data);
         })
         .catch((error) => {
           console.error("Error:", error);

@@ -134,15 +134,15 @@ document.addEventListener("turbo:load", () => {
     boton.addEventListener("click", (event) => {
       if (isSendingFavorite) return;
       isSendingFavorite = true;
-      const movieId = event.target.parentElement.dataset.movieId;
-      const title = event.target.parentElement.getAttribute("title");
-      const overview = event.target.parentElement.getAttribute("overview");
+      const movieId = event.target.parentElement.parentElement.dataset.movieId;
+      const title = event.target.parentElement.parentElement.getAttribute("title");
+      const overview = event.target.parentElement.parentElement.getAttribute("overview");
       const poster_path =
-        event.target.parentElement.getAttribute("poster_path");
+        event.target.parentElement.parentElement.getAttribute("poster_path");
       const tmdb_vote_average =
-        event.target.parentElement.getAttribute("vote_average");
+        event.target.parentElement.parentElement.getAttribute("vote-average");
       const tmdb_vote_count =
-        event.target.parentElement.getAttribute("vote_count");
+        event.target.parentElement.parentElement.getAttribute("vote-count");
       fetch("/favorites", {
         // Enviar a la base de datos
         method: "POST",
@@ -165,17 +165,11 @@ document.addEventListener("turbo:load", () => {
         }),
       })
         .then(async (response) => {
-          const contentType = response.headers.get("content-type");
-          if (
-            !response.ok ||
-            !contentType ||
-            !contentType.includes("application/json")
-          ) {
+          if (response.redirected) {
             window.location.href = "/login";
             return;
           }
           const data = await response.json();
-          console.log("Respuesta: ", data);
         })
         .catch((error) => {
           console.error("Error:", error);

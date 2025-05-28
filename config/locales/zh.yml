@@ -38,6 +38,7 @@ zh:
     total_users: "用户总数："
     no_ratings: "你还没有给任何电影评分。"
     enabled: "已启用："
+    favoritemovies: "你最喜欢的电影："
   edit: "编辑"
   delete: "删除"
   ratings: "评分"
