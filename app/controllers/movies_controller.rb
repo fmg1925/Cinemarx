@@ -4,7 +4,9 @@ class MoviesController < ApplicationController
   AUTH_TOKEN = ENV["TOKEN"]
 
   def index
-    page = params[:page] || 1
+    page = [ params[:page].to_i, 1 ].max
+    page = 500 if page > 500
+    max_pages = 500
 
     language = current_language_code
 
@@ -12,8 +14,11 @@ class MoviesController < ApplicationController
     response = HTTParty.get(api_url, headers: { "Authorization" => "Bearer #{AUTH_TOKEN}" })
 
     if response.success?
-      @movies = response.parsed_response["results"]
-      @movies.each do |movie|
+      rawmovies = response.parsed_response["results"]
+      total_results = response.parsed_response["total_results"]
+      total_results = [ total_results, max_pages * 20 ].min
+
+      rawmovies.each do |movie|
         tmdb_rating_5 = movie["vote_average"].to_f / 2.0
         tmdb_votes = movie["vote_count"].to_i rescue 0
 
@@ -32,21 +37,19 @@ class MoviesController < ApplicationController
         movie["rating"] = combined.round(2)
         movie["total_votes"] = total_votes
       end
+      @movies = Kaminari.paginate_array(rawmovies, total_count: total_results).page(page).per(20)
       @total_pages = response.parsed_response["total_pages"]
-      @current_page = page.to_i
     else
-      @movies = []
-      @total_pages = 1
-      @current_page = 1
+      @movies = Kaminari.paginate_array([]).page(page).per(20)
     end
   end
 
   def search
     query = params[:query]
-    page = params[:page] || 1
-    @current_page = page.to_i
-    @total_pages = 0
-    return @movies = [] if query.blank?
+    page = [ params[:page].to_i, 1 ].max
+    page = 500 if page > 500
+    max_pages = 500
+    return @movies = Kaminari.paginate_array([]).page(page).per(20) if query.blank?
 
     I18n.locale = params[:locale] || extract_locale_from_referer || :en
     language = current_language_code
@@ -56,8 +59,11 @@ class MoviesController < ApplicationController
     response = HTTParty.get(api_url, headers: { "Authorization" => "Bearer #{AUTH_TOKEN}" })
 
     if response.success?
-       @movies = response.parsed_response["results"]
-        @movies.each do |movie|
+       raw_movies = response.parsed_response["results"]
+       total_results = response.parsed_response["total_results"]
+       total_results = [ total_results, max_pages * 20 ].min
+
+        raw_movies.each do |movie|
           tmdb_rating_5 = movie["vote_average"].to_f / 2.0
           tmdb_votes = movie["vote_count"].to_i rescue 0
 
@@ -78,12 +84,9 @@ class MoviesController < ApplicationController
 
           cache_movie_data(movie, current_language_code)
         end
-      @total_pages = response.parsed_response["total_pages"]
-      @current_page = page.to_i
+        @movies = Kaminari.paginate_array(raw_movies, total_count: total_results).page(page).per(20)
     else
-      @movies = []
-      @total_pages = 0
-      @current_page = 0
+      @movies = Kaminari.paginate_array([]).page(page).per(20)
     end
   end
 
@@ -102,14 +105,48 @@ class MoviesController < ApplicationController
       redirect_to movies_path, alert: "Selecciona una película primero." and return
     end
 
-    @movie = session[:movie]
-    movie_id = @movie["id"]
+    movie_session = session[:movie]
+    movie_id = movie_session["id"]
+    language = current_language_code
 
-    if logged_in?
-      current_user.watched_movies.find_or_create_by(movie_id: movie_id)
+    cached = CachedMovie.find_by(movie_id: movie_id, language: language)
+
+    if cached
+      @movie = movie_session.merge(
+      "title" => cached.title,
+      "overview" => cached.overview,
+      "poster_path" => cached.poster_path,
+      "vote_average" => cached.vote_average.to_f,
+      "vote_count" => cached.vote_count.to_i
+    )
+    else
+      movie_url = "https://api.themoviedb.org/3/movie/#{movie_id}?language=#{current_language_code}&api_key=#{API_KEY}"
+      response = HTTParty.get(movie_url, headers: { "Authorization" => "Bearer #{AUTH_TOKEN}" })
+
+      if response.success?
+        cache_movie_data(response.parsed_response, current_language_code)
+
+        cached = CachedMovie.find_by(movie_id: movie_id, language: current_language_code)
+
+        if cached
+          @movie = movie_session.merge(
+          "title" => cached.title,
+          "overview" => cached.overview,
+          "poster_path" => cached.poster_path,
+          "vote_average" => cached.vote_average.to_f,
+          "vote_count" => cached.vote_count.to_i
+          )
+        else
+          @movie = movie_session
+        end
+      else
+        Rails.logger.warn "Falló al cachear película #{movie_id} en #{current_language_code} - Código: #{response.code} - Body: #{response.body}"
+        @movie = movie_session
+      end
     end
 
-    cache_movie_data(@movie, current_language_code)
+    current_user.watched_movies.find_or_create_by(movie_id: movie_id) if logged_in?
+
     CacheMovieJob.perform_later(movie_id, API_KEY, AUTH_TOKEN)
   end
 

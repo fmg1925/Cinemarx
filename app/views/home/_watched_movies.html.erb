@@ -1,8 +1,5 @@
 <turbo-frame id="watched_movies_frame">
   <%= render partial: "movie", collection: watched_movies, as: :movie %>
 
-  <% page = (params[:page].presence || 1).to_i %>
-  <% if watched_movies.size == 10 && current_user.watched_movies.count > 10 * page %>
-    <%= link_to t("showmore"), home_path(page: (params[:page] || 1).to_i + 1), data: { turbo_frame: "watched_movies_frame" }, class: "btn btn-primary" %>
-  <% end %>
+  <%= paginate watched_movies, param_name: :watched_page %>
 </turbo-frame>

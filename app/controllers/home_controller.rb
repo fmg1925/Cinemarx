@@ -2,9 +2,9 @@ class HomeController < ApplicationController
   def index
     return unless logged_in?
 
-    page = params[:page].to_i
-    page = 1 if page < 1
-    per_page = 10
+    favorites_page = params[:favorites_page] || 1
+    rated_page     = params[:rated_page]     || 1
+    watched_page   = params[:watched_page]   || 1
 
     I18n.locale = params[:locale] || extract_locale_from_referer || :en
     language = current_language_code
@@ -94,9 +94,9 @@ class HomeController < ApplicationController
       }
     end.compact
 
-    @favorite_movies = favoritemovies[((page - 1) * per_page), per_page] || []
-    @rated_movies = all_rated[((page - 1) * per_page), per_page] || []
-    @watched_movies = watchedmovies[((page - 1) * per_page), per_page] || []
+    @favorite_movies = Kaminari.paginate_array(favoritemovies).page(favorites_page).per(10)
+    @rated_movies = Kaminari.paginate_array(all_rated).page(rated_page).per(10)
+    @watched_movies = Kaminari.paginate_array(watchedmovies).page(watched_page).per(10)
 
     respond_to do |format|
       format.html

@@ -17,7 +17,12 @@ Este es un proyecto web desarrollado en **Ruby on Rails** que permite explorar u
 - **PostgreSQL**
 - **HTML/CSS**
 - **JavaScript**
-  
+
+## Pre-requisitos
+- **Redis:**\
+    **Para Windows:** https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/install-redis-on-windows/ \
+    **Para Linux:** `sudo apt install redis-server`
+
 ## Instalación y uso
 
 1. **Clona el repositorio:**

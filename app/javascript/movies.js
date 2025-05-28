@@ -42,7 +42,7 @@ document.addEventListener("turbo:load", () => {
       // Hacer las estrellas clickeables
       if (isSending) return;
       isSending = true;
-      const score = event.target.dataset.score; // Csonseguir la puntuación
+      const score = event.target.dataset.score; // Conseguir la puntuación
       const title = event.target.parentElement.getAttribute("title");
       const overview = event.target.parentElement.getAttribute("overview");
       const poster_path =
@@ -135,8 +135,10 @@ document.addEventListener("turbo:load", () => {
       if (isSendingFavorite) return;
       isSendingFavorite = true;
       const movieId = event.target.parentElement.parentElement.dataset.movieId;
-      const title = event.target.parentElement.parentElement.getAttribute("title");
-      const overview = event.target.parentElement.parentElement.getAttribute("overview");
+      const title =
+        event.target.parentElement.parentElement.getAttribute("title");
+      const overview =
+        event.target.parentElement.parentElement.getAttribute("overview");
       const poster_path =
         event.target.parentElement.parentElement.getAttribute("poster_path");
       const tmdb_vote_average =

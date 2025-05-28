@@ -31,7 +31,6 @@ class CacheMovieJob < ApplicationJob
 
     return if uncached_languages.empty?
 
-
     uncached_languages.each do |lang_code|
       movie_url = "https://api.themoviedb.org/3/movie/#{movie_id}?language=#{lang_code}&api_key=#{api_key}"
       response = HTTParty.get(movie_url, headers: { "Authorization" => "Bearer #{auth_token}" })

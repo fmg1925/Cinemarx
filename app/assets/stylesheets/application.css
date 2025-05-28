@@ -51,6 +51,10 @@
     margin: 2px;
   }
 
+  label {
+    padding: 5px;
+  }
+
   #title {
     font-size: 3rem;
     margin-bottom: 5px;

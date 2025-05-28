@@ -42,10 +42,13 @@ es:
   edit: "Editar"
   delete: "Eliminar"
   ratings: "Calificaciones"
-  pagination:
-    previous: "Anterior"
-    next: "Siguiente"
-    page: "Página"
+  views:
+    pagination:
+      first: "Primera"
+      last: "Última"
+      previous: "Anterior"
+      next: "Siguiente"
+      truncate: "…"
   search: "Buscar"
   errors:
     not_authorized: "No autorizado"

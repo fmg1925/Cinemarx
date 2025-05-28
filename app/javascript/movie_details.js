@@ -9,7 +9,7 @@ document.addEventListener("turbo:load", () => {
       // Hacer las estrellas clickeables
       if (isSending) return;
       isSending = true;
-      const score = event.target.dataset.score; // Csonseguir la puntuación
+      const score = event.target.dataset.score; // Conseguir la puntuación
       const title = event.target.parentElement.getAttribute("title");
       const overview = event.target.parentElement.getAttribute("overview");
       const poster_path =
@@ -168,7 +168,6 @@ document.addEventListener("turbo:load", () => {
             window.location.href = "/login";
             return;
           }
-          const data = await response.json();
         })
         .catch((error) => {
           console.error("Error:", error);

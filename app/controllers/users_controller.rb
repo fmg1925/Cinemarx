@@ -1,7 +1,11 @@
 class UsersController < ApplicationController
   before_action :require_admin, only: [ :index, :destroy ]
   def index
-    @users = User.all
+    query = params[:query]
+    users_scope = User.all
+    users_scope = users_scope.where("username ILIKE :q", q: "%#{query}%") if query.present?
+
+    @users = users_scope.page(params[:page]).per(10)
   end
 
   def new

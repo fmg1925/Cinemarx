@@ -19,24 +19,11 @@
     <% @movies.each do |movie| %>
       <%= render 'movies/movie', movie: movie %>
     <% end %>
+    <%= paginate @movies %>
   </div>
 <% elsif params[:query].present? %>
   <p><%= t("movies.noresults") %></p>
 <% end %>
-
-<div class="pagination">
-  <% if params[:query].present? && @movies.present? %>
-    <% if @current_page > 1 %>
-      <%= link_to t("pagination.previous"), search_movies_path(query: params[:query], page: @current_page - 1), class: "pagination-link" %>
-    <% end %>
-
-    <span><%= t("pagination.page") %> <%= @current_page %> / <%= @total_pages %></span>
-
-    <% if @current_page < @total_pages %>
-      <%= link_to t("pagination.next"), search_movies_path(query: params[:query], page: @current_page + 1), class: "pagination-link" %>
-    <% end %>
-  <% end %>
-</div>
 
 <%= javascript_include_tag "movie_search", "data-turbo-track": "reload", defer: true %>
 <%= javascript_include_tag "movies", "data-turbo-track": "reload", defer: true %>

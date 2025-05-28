@@ -9,21 +9,12 @@
   <% @movies.each do |movie| %>
     <%= render 'movies/movie', movie: movie %>
   <% end %>
+  <%= paginate @movies %>
   </div>
 <% else %>
   <p><%= t("movies.nomovies") %></p>
 <% end %>
 
-<div class="pagination">
-  <% if @current_page > 1 %>
-    <%= link_to t("pagination.previous"), movies_path(page: @current_page - 1), class: "pagination-link" %>
-  <% end %>
 
-  <span><%= t("pagination.page") %> <%= @current_page %> / <%= @total_pages %></span>
-
-  <% if @current_page < @total_pages %>
-    <%= link_to t("pagination.next"), movies_path(page: @current_page + 1), class: "pagination-link" %>
-  <% end %>
-</div>
 
 <%= javascript_include_tag "movies", "data-turbo-track": "reload", defer: true %>
