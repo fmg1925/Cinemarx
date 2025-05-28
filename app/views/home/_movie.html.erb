@@ -22,16 +22,33 @@
       <%= button_tag(favorite ? '💛' : '❤️', class: "poster-button", type: 'button') %>
       <% end %>
     </div>
+  <div class="movie-rating" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>">
+      <% rating = (movie['rating'] || 0).to_f %>
+
+      <% 1.upto(5) do |i| %>
+        <% star_class = 
+          if rating >= i
+            "fa-solid"
+          elsif rating >= i - 0.5
+            "fa-solid fa-star-half-stroke"
+          else
+            "fa-regular"
+          end
+        %>
+        <% star_color = (user_rating >= i - 0.5) ? "color: #ffae10" : "" %>
+        <i class="fa-star <%= star_class %> star" style="<%= star_color %>" data-score="<%= i %>"></i>
+      <% end %>
+      <br>
+      <span class="rating-score">
+        <%= number_with_precision(rating, precision: 1) %> / 5 (<%= movie['total_votes'] %> <%= t("ratings") %>)
+      </span>
+    </div>
   </div>
+
   <div class="movie-details">
     <strong><%= movie['title'] %></strong><br>
     <%= movie['overview'] %><br>
   </div>
-  <% if movie["user_score"].present? %>
-    <p><%= t("users.your_rating") %> <%= movie["user_score"] %> <%= t("stars") %></p>
-    <p><%= t("users.rating") %> <%= movie["rating"] %> / 5</p>
-    <p><%= t("users.total_users") %> <%= movie["total_votes"] %></p>
-  <% end %>
 </div>
 
 <%= javascript_include_tag "movies", "data-turbo-track": "reload", defer: true %>
