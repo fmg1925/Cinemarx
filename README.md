@@ -28,7 +28,7 @@ Este es un proyecto web desarrollado en **Ruby on Rails** que permite explorar u
 
     ```bash
     sudo apt update
-    sudo apt install rbenv ruby-build git postgresql libpq-dev libffi-dev libyaml-dev redis-server
+    sudo apt install -y rbenv ruby-build git postgresql libpq-dev libffi-dev libyaml-dev redis-server
     git clone https://github.com/rbenv/rbenv.git ~/.rbenv
     ~/.rbenv/bin/rbenv init
     echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
@@ -95,7 +95,7 @@ Este proyecto utiliza **Sidekiq** para ejecutar tareas en segundo plano.
     bundle exec sidekiq -C config/sidekiq.yml
     ```
 
-7. **Iniciar el servidor en una nueva terminal:**
+7. **Iniciar el servidor en una nueva terminal o instancia de WSL:**
     ```bash
     ~/Cinemarx/bin/rails server
     ```
