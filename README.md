@@ -12,24 +12,45 @@ Este es un proyecto web desarrollado en **Ruby on Rails** que permite explorar u
   
 ## Tecnologías utilizadas
 
-- **Ruby on Rails**
+- **Ruby 3.3.8**
+- **Rails 8.0.2**
 - **The Movie DB API**
 - **PostgreSQL**
 - **HTML/CSS**
 - **JavaScript**
 
 ## Pre-requisitos
-- **Redis:**\
-    **Para Windows:** https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/install-redis-on-windows/ \
-    **Para Linux:** `sudo apt install redis-server`
+- **Para Windows**:
+    **WSL2 (Debian/Ubuntu):**
+    https://wiki.debian.org/InstallingDebianOn/Microsoft/Windows/SubsystemForLinux
+
+    **Dentro de WSL/Linux:**
+
+    ```bash
+    sudo apt update
+    sudo apt install rbenv ruby-build git postgresql libpq-dev libffi-dev libyaml-dev redis-server
+    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+    ~/.rbenv/bin/rbenv init
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+    echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+    source ~/.bashrc
+    git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+    rbenv install 3.3.8
+    rbenv global 3.3.8
+    rbenv rehash
+    gem install rails
+    sudo -u postgres psql # Cambiar la contraseña de postgres
+    ALTER USER postgres with encrypted password 'your_password'; # Tu contraseña aquí
+    exit # Salir de la consola de postgres
+    ```
 
 ## Instalación y uso
 
 1. **Clona el repositorio:**
 
    ```bash
-   git clone https://github.com/fmg1925/Cinemarx.git
-   cd Cinemarx
+   git clone https://github.com/fmg1925/Cinemarx.git ~/Cinemarx
+   cd ~/Cinemarx
    ```
 
 2. **Instalar las dependencias:**
@@ -47,7 +68,7 @@ Este es un proyecto web desarrollado en **Ruby on Rails** que permite explorar u
     **Edita las siguientes líneas con tus credenciales si es necesario:**
     ```yml
     username: postgres
-    password: password
+    password: your_password
     host: localhost
     ```
 
@@ -76,7 +97,7 @@ Este proyecto utiliza **Sidekiq** para ejecutar tareas en segundo plano.
 
 7. **Iniciar el servidor en una nueva terminal:**
     ```bash
-    rails server
+    ~/Cinemarx/bin/rails server
     ```
 
 8. **Visita `http://localhost:3000` en tu navegador.**

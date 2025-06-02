@@ -11,6 +11,7 @@
 
   * { /* Color de las letras */
     color: #ecf1f2;
+    font-family: 'Noto Serif', Arial, Helvetica, sans-serif;
     text-shadow:
       -0.5px -1px 0 black,
       0.5px -1px 0 black,
