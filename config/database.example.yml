@@ -2,7 +2,7 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 100
-  username: postgresql
+  username: postgres
   password: your_password
   host: localhost
 
