@@ -4,45 +4,55 @@
 
 <% if @movie.present? %>
   <div class="movie-details-page">
-    <h1><%= @movie["title"] %></h1>
-
+  <% favorite = current_user&.favorite_movies&.find_by(movie_id: @movie['id']) || false %>
+    <div class="title-wrapper">
+      <h1 class="movie-details-title"><%= @movie["title"] %></h1>
+    </div>
     <div class="movie-details-content">
-
-      <div class="movie-details-poster">
+      <div class="movie-details-poster"
+     data-movie-id="<%= @movie['id'] %>"
+     data-vote-count="<%= @movie['vote_count'] %>"
+     data-vote-average="<%= @movie['vote_average'] %>"
+     data-title="<%= @movie['title'] %>"
+     data-overview="<%= @movie['overview'] %>"
+     data-poster-path="<%= @movie['poster_path'] %>"
+     data-backdrop-path="<%= @movie['backdrop_path'] %>"
+>
+        <%= button_tag(favorite ? '💛' : '❤️', class: "details-poster-button", type: 'button') %>
         <%= image_tag(@movie["poster_path"] ? "https://image.tmdb.org/t/p/w500#{@movie["poster_path"]}" : asset_path('placeholder.png'), alt: @movie["title"]) %>
       </div>
 
-      <div class="movie-details-info">
-        <p><strong><%= t("movies.overview") %>:</strong></p>
-        <p><%= @movie["overview"] %></p>
+      <div class="movie-details-info" style="<%= @movie['backdrop_path'].present? ? "background-image: url('https://image.tmdb.org/t/p/w1280#{@movie['backdrop_path']}');" : '' %>">
+        <h2><strong><%= t("movies.overview") %></strong></h2>
+        <p><%= @movie['overview'] != "" ? @movie['overview'] : t("no_synopsis_available") %></p>
 
         <% user_rating = current_user&.ratings&.find_by(movie_id: @movie['id'])&.score || 0 %>
         <% favorite = current_user&.favorite_movies&.find_by(movie_id: @movie['id']) || false %>
         <% user_avg = Rating.where(movie_id: @movie['id']).average(:score) || 0 %>
         <% user_count = Rating.where(movie_id: @movie['id']).count %>
-        <% rating = Rating.find_by(user_id: current_user&.id, movie_id: @movie['id']) %>
         <% total_votes = @movie['vote_count'].to_i + user_count %>
 
-        <div class="movie-details-rating" data-movie-id="<%= @movie["id"] %>" vote-count="<%= @movie['vote_count'] %>" vote-average="<%= @movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= @movie['title'] %>" overview="<%= @movie['overview'] %>" poster_path="<%= @movie['poster_path'] %>">
-        <% rating = (@movie['rating'] || 0).to_f %>
-
-        <% 1.upto(5) do |i| %>
-          <% star_class = 
-            if rating >= i
-              "fa-solid"
-            elsif rating >= i - 0.5
-              "fa-solid fa-star-half-stroke"
-            else
-              "fa-regular"
-            end
-          %>
-          <% star_color = (user_rating >= i - 0.5) ? "color: #ffae10" : "" %>
-          <i class="fa-star <%= star_class %> star" style="<%= star_color %>" data-score="<%= i %>"></i>
-        <% end %>
-        <br>
-        <span class="rating-score">
-          <%= number_with_precision(rating, precision: 1) %> / 5 (<%= total_votes %> <%= t("ratings") %>)
-        </span>
+        <div class="movie-details-rating">
+          <div class="rating-content">
+            <% rating = (@movie['rating'].to_f) == 0 ? user_rating : (@movie['rating'].to_f) %>
+            <% 1.upto(5) do |i| %>
+              <% star_class = 
+                if rating >= i
+                  "fa-solid"
+                elsif rating >= i - 0.5
+                  "fa-solid fa-star-half-stroke"
+                else
+                  "fa-regular"
+                end
+              %>
+              <% star_color = (user_rating >= i - 0.5) ? "color: #ffae10" : "" %>
+              <i class="fa-star <%= star_class %> star" style="<%= star_color %>" data-score="<%= i %>"></i>
+            <% end %>
+            <br>
+            <span class="rating-score">
+              <%= number_with_precision(rating, precision: 1) %> / 5 (<%= total_votes %> <%= t("ratings") %>)
+            </span>
+          </div>
         </div>
       </div>
     </div>

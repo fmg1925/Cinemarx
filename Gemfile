@@ -66,5 +66,4 @@ end
 gem "httparty"
 gem "dotenv-rails"
 gem "sidekiq"
-gem "activerecord-session_store"
 gem "kaminari"

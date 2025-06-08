@@ -1,22 +1,36 @@
 <% content_for :stylesheets do %>
   <%= stylesheet_link_tag :users, "data-turbo-track": "reload" %>
 <% end %>
+
 <h1><%= t("users.list") %></h1>
 
-<table>
-  <% @users.each do |user| %>
-    <tr>
-      <td><%= user.username %></td>
-      <td>
-        <%= link_to t("edit"), edit_user_path(user), class: 'btn-edit' %>
-      </td>
-      <td class="td-delete">
-        <%= button_to t("delete"),
-          user_path(user), class: "confirm", method: :delete %>
-      </td>
-    </tr>
+<div id="user-search">
+  <%= form_with url: users_path, method: :get, local: true do %>
+    <%= hidden_field_tag :locale, I18n.locale %>
+    <%= label_tag :query, t("users.search") %>
+    <%= text_field_tag :query, params[:query], placeholder: t("login.username") %>
+    <%= submit_tag t("search") %>
   <% end %>
-
-</table>
+</div>
 <br>
-<%= paginate @users %>
+<br>
+<% if @users.any? %>
+  <table id="edit-table">
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.username %></td>
+        <td>
+          <%= button_to t("edit"), edit_user_path(user), class: 'btn-edit', method: :get %>
+        </td>
+        <td class="td-delete">
+          <%= button_to t("delete"),
+            user_path(user), class: "confirm", method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <br>
+  <%= paginate @users %>
+<% else %>
+  <h2><%= t("movies.noresults") %><h2>
+<% end %>

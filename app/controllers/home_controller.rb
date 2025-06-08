@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  API_KEY = ENV["API_KEY"]
+  AUTH_TOKEN = ENV["TOKEN"]
   def index
     return unless logged_in?
 
@@ -21,7 +23,11 @@ class HomeController < ApplicationController
       next unless cached
 
       tmdb_rating_5 = cached.vote_average.to_f / 2.0
-      tmdb_votes = cached.vote_count.to_i rescue 0
+      tmdb_votes = begin
+        cached.vote_count.to_i
+      rescue StandardError
+        0
+      end
 
       user_avg = Rating.where(movie_id: favoritemovie.movie_id).average(:score) || 0
       user_count = Rating.where(movie_id: favoritemovie.movie_id).count
@@ -30,15 +36,16 @@ class HomeController < ApplicationController
 
       combined = total_votes > 0 ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
       {
-        "id" => favoritemovie.movie_id,
-        "title" => cached.title,
-        "overview" => cached.overview,
-        "poster_path" => cached.poster_path,
-        "user_score" => rating&.score || nil,
-        "vote_average" => cached.vote_average.to_f,
-        "vote_count" => tmdb_votes,
-        "rating" => combined.round(2),
-        "total_votes" => total_votes
+        'id' => favoritemovie.movie_id,
+        'title' => cached.title,
+        'overview' => cached.overview,
+        'poster_path' => cached.poster_path,
+        'backdrop_path' => cached.backdrop_path,
+        'user_score' => rating&.score || nil,
+        'vote_average' => cached.vote_average.to_f,
+        'vote_count' => tmdb_votes,
+        'rating' => combined.round(2),
+        'total_votes' => total_votes
       }
     end.compact
 
@@ -47,8 +54,13 @@ class HomeController < ApplicationController
 
       cached = CachedMovie.find_by(movie_id: movie_id, language: language)
       next unless cached
+
       tmdb_rating_5 = cached.vote_average.to_f / 2.0
-      tmdb_votes = cached.vote_count.to_i rescue 0
+      tmdb_votes = begin
+        cached.vote_count.to_i
+      rescue StandardError
+        0
+      end
 
       user_avg = Rating.where(movie_id: movie_id).average(:score) || 0
       user_count = Rating.where(movie_id: movie_id).count
@@ -57,15 +69,16 @@ class HomeController < ApplicationController
       combined = total_votes > 0 ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
 
       {
-        "id" => movie_id,
-        "title" => cached.title,
-        "overview" => cached.overview,
-        "poster_path" => cached.poster_path,
-        "user_score" => rating.score,
-        "vote_average" => cached.vote_average.to_f,
-        "vote_count" => tmdb_votes,
-        "rating" => combined.round(2),
-        "total_votes" => total_votes
+        'id' => movie_id,
+        'title' => cached.title,
+        'overview' => cached.overview,
+        'poster_path' => cached.poster_path,
+        'backdrop_path' => cached.backdrop_path,
+        'user_score' => rating.score,
+        'vote_average' => cached.vote_average.to_f,
+        'vote_count' => tmdb_votes,
+        'rating' => combined.round(2),
+        'total_votes' => total_votes
       }
     end.compact
 
@@ -74,7 +87,11 @@ class HomeController < ApplicationController
       next unless cached
 
       tmdb_rating_5 = cached.vote_average.to_f / 2.0
-      tmdb_votes = cached.vote_count.to_i rescue 0
+      tmdb_votes = begin
+        cached.vote_count.to_i
+      rescue StandardError
+        0
+      end
 
       user_avg = Rating.where(movie_id: watchedmovie.movie_id).average(:score) || 0
       user_count = Rating.where(movie_id: watchedmovie.movie_id).count
@@ -83,14 +100,15 @@ class HomeController < ApplicationController
       combined = total_votes > 0 ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
 
       {
-        "id" => watchedmovie.movie_id,
-        "title" => cached.title,
-        "overview" => cached.overview,
-        "poster_path" => cached.poster_path,
-        "vote_average" => cached.vote_average.to_f,
-        "vote_count" => tmdb_votes,
-        "rating" => combined.round(2),
-        "total_votes" => total_votes
+        'id' => watchedmovie.movie_id,
+        'title' => cached.title,
+        'overview' => cached.overview,
+        'poster_path' => cached.poster_path,
+        'backdrop_path' => cached.backdrop_path,
+        'vote_average' => cached.vote_average.to_f,
+        'vote_count' => tmdb_votes,
+        'rating' => combined.round(2),
+        'total_votes' => total_votes
       }
     end.compact
 
@@ -98,25 +116,63 @@ class HomeController < ApplicationController
     @rated_movies = Kaminari.paginate_array(all_rated).page(rated_page).per(10)
     @watched_movies = Kaminari.paginate_array(watchedmovies).page(watched_page).per(10)
 
-    respond_to do |format|
-      format.html
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.replace("favorite_movies", partial: "home/favorite_movies", locals: { favorite_movies: @favorite_movies }),
-          turbo_stream.replace("rated_movies", partial: "home/rated_movies", locals: { rated_movies: @rated_movies }),
-          turbo_stream.replace("watched_movies", partial: "home/watched_movies", locals: { watched_movies: @watched_movies })
-        ]
+    @movies = []
+
+    if @favorite_movies.empty? && @rated_movies.empty? && @watched_movies.empty?
+      language = current_language_code
+
+      api_url = "https://api.themoviedb.org/3/movie/popular?api_key=#{API_KEY}&language=#{language}&page=1"
+      response = HTTParty.get(api_url, headers: { 'Authorization' => "Bearer #{AUTH_TOKEN}" })
+
+      if response.success?
+        rawmovies = response.parsed_response['results']
+
+        rawmovies.each do |movie|
+          tmdb_rating_5 = movie['vote_average'].to_f / 2.0
+          tmdb_votes = begin
+            movie['vote_count'].to_i
+          rescue StandardError
+            0
+          end
+
+          user_ratings = Rating.where(movie_id: movie['id'])
+          user_avg = user_ratings.average(:score) || 0
+          user_count = user_ratings.count
+
+          total_votes = tmdb_votes + user_count
+
+          combined = if total_votes > 0
+                       ((tmdb_rating_5 * tmdb_votes) + (user_avg * user_count)) / total_votes
+                     else
+                       tmdb_rating_5
+                     end
+
+          movie['rating'] = combined.round(2)
+          movie['total_votes'] = total_votes
+        end
+        @movies = rawmovies
+      end
+    else
+      respond_to do |format|
+        format.html
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace('favorite_movies', partial: 'home/favorite_movies', locals: { favorite_movies: @favorite_movies }),
+            turbo_stream.replace('rated_movies', partial: 'home/rated_movies', locals: { rated_movies: @rated_movies }),
+            turbo_stream.replace('watched_movies', partial: 'home/watched_movies', locals: { watched_movies: @watched_movies })
+          ]
+        end
       end
     end
   end
 
   def extract_locale_from_referer
-  URI.parse(request.referer || "").query
-    &.split("&")
-    &.map { |p| p.split("=") }
-    &.to_h["locale"]
-    &.to_sym
-  rescue
+    URI.parse(request.referer || '').query
+       &.split('&')
+       &.map { |p| p.split('=') }
+       &.to_h&.[]('locale')
+       &.to_sym
+  rescue StandardError
     nil
   end
 
@@ -124,11 +180,11 @@ class HomeController < ApplicationController
 
   def current_language_code
     case I18n.locale
-    when :es then "es-MX"
-    when :en then "en-US"
-    when :ko then "ko-KR"
-    when :zh then "zh-CN"
-    else "en-US"
+    when :es then 'es-MX'
+    when :en then 'en-US'
+    when :ko then 'ko-KR'
+    when :zh then 'zh-CN'
+    else 'en-US'
     end
   end
 end

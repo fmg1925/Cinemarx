@@ -20,7 +20,7 @@ class FavoritesController < ApplicationController
 
         render json: { success: true }
       else
-        render json: { errors: favorite.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: new_favorite.errors.full_messages }, status: :unprocessable_entity
       end
     end
   end

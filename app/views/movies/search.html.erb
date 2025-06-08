@@ -4,16 +4,6 @@
 <% end %>
 <h1><%= t("movies.search") %></h1>
 
-<table>
-<%= form_with url: url_for(only_path: true, params: request.query_parameters), method: :get, local: true do %>
-<tr>
-  <td><%= label_tag :query, t("movies.namesearch") %></td>
-  <td><%= text_field_tag :query, params[:query].to_s.strip, id: "movie-search-textbox" %></td>
-  <td><%= submit_tag t("search"), id: "movie-search-button" %></td>
-</tr>
-<% end %>
-</table>
-<br>
 <% if @movies.present? %>
   <div id="movies-container">
     <% @movies.each do |movie| %>

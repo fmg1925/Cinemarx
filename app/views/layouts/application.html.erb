@@ -1,7 +1,6 @@
-<!-- app/views/layouts/application.html.erb --> <!-- Plantilla principal -->
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title><%= content_for(:title) || "Cinemarx" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,33 +10,42 @@
 
     <%= yield :head %> <!-- Insertar head de la vista -->
 
-    <link rel="icon" href="<%= asset_path("icon.png") %>" type="image/png">
-
     <%= stylesheet_link_tag :application, "data-turbo-track": "reload" %>
-    <%= yield :stylesheets %> <!-- Insertar stylesheet de la vista -->
+
+    <%= yield :stylesheets %>
     <link href='https://fonts.googleapis.com/css?family=Noto Serif' rel='stylesheet'> <!-- Fuente Noto Serif -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!-- Usar font awesome para las estrellas -->
     <%= javascript_importmap_tags %>
-  </head>
-
-  <body>
+</head>
+<body>
     <header>
-      <%= link_to 'Cinemarx', home_path, id: "title", data: { turbo: false } %><br>
-      <%= link_to t("movies.popular"), movies_path, class: "header-links", data: { turbo: false } %>
-      <%= link_to t("movies.search"), search_movies_path, class: "header-links", data: { turbo: false } %>
+        <%= link_to home_path, data: { turbo: false } do %>
+            <h1 id="title">Cine<span style="color: #ff0040;">marx</span></h1>
+        <% end %>
+        <nav>
+            <%= link_to t("populars"), movies_path, data: { turbo: false }, class: "header-links" %>
+            <% if !logged_in? %>
+                <%= link_to t("login.title"), login_path, class: "header-links" %>
+                <%= link_to t("login.register"), new_user_path, class: "header-links" %>
+            <% elsif logged_in? %>
+            <%= link_to t("login.logout"), logout_path, class: "header-links confirm", data: { controller: "confirm", action: "confirm#confirm"} %>
+            <% end %>
+            <% if admin? %>
+              <%= link_to t("users.list"), users_path, class: "header-links" %>
+              <%= link_to t("users.create"), new_user_path, class: "header-links" %>
+            <% end %>
+        </nav>
+  
+        <div class="search-box">
+          <%= form_with url: search_movies_path, method: :get, local: true do %>
+            <button type="submit" class="search-button">
+              <img src="<%= asset_path('search.png') %>" alt="search" id="search-button">
+            </button>
+            <input type="text" name="query" placeholder="<%= t('search') %>" id="search">
+          <% end %>
+        </div>
 
-      <% if !logged_in? %>
-      <%= link_to t("login.title"), login_path, class: "header-links" %>
-      <%= link_to t("login.register"), new_user_path, class: "header-links" %>
-      <% elsif logged_in? %>
-        <%= link_to t("login.logout"), logout_path, class: "header-links confirm", data: { controller: "confirm", action: "confirm#confirm"} %>
-      <% end %>
-
-      <% if admin? %>
-        <%= link_to t("users.list"), users_path, class: "header-links" %>
-        <%= link_to t("users.create"), new_user_path, class: "header-links" %>
-      <% end %>
-      <%= form_with url: request.path, method: :get, local: true, html: { id: "language-dropdown" } do %>
+        <%= form_with url: request.path, method: :get, local: true, html: { id: "language-dropdown" } do %>
         <% params.to_unsafe_h.except(:locale, :controller, :action).each do |key, value| %>
           <% if value.is_a?(Array) %>
             <% value.each do |v| %>
@@ -51,14 +59,15 @@
         <%= select_tag :locale, options_for_select([["English", "en"], ["Español", "es"], ["한국어", "ko"], ["中文", "zh"]], I18n.locale), onchange: "this.form.submit();" %>
       <% end %>
     </header>
-    <main>
+    
+    <div class="fondo" style="--bg-url: url(<%= asset_path('background.jpg') %>)">
     <% if flash[:notice] %> <!-- Mostrar errores y alertas en todas las páginas -->
-      <p style="color: lime;"><%= flash[:notice] %></p>
+      <p class="notice"><%= flash[:notice] %></p>
     <% elsif flash[:alert] %>
-      <p style="color: yellow;"><%= flash[:alert] %></p>
+      <p class="alert"><%= flash[:alert] %></p>
     <% end %>
     <%= yield %> <!-- Insertar body de la vista -->
-    </main>
+    
     <script>
       document.addEventListener("turbo:load", () => { // Al cargar la página
         document.querySelectorAll(".confirm:not([data-confirm-processed])").forEach(element => { // Todos los elementos de clase confirm
@@ -72,5 +81,5 @@
         });
       });
     </script>
-  </body>
+</body>
 </html>

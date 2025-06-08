@@ -22,8 +22,6 @@
     <div id="rated_movies">
       <%= render 'home/rated_movies', rated_movies: @rated_movies %>
     </div>
-  <% elsif !@favorite_movies.present? %>
-    <p><%= t("users.no_ratings") %></p>
   <% end %>
   
   <% if @watched_movies.present? %>
@@ -32,9 +30,24 @@
       <%= render 'home/watched_movies', watched_movies: @watched_movies %>
     </div>
   <% end %>
+
+  <% if !@favorite_movies.present? && !@rated_movies.present? && !@watched_movies.present? %>
+    <% if @movies.any? %>
+      <div id="movies-container">
+      <% @movies.each do |movie| %>
+        <%= render 'movies/movie', movie: movie %>
+      <% end %>
+      </div>
+    <% else %>
+      <p><%= t("movies.nomovies") %></p>
+    <% end %>
+  <% end %>
 <% else %>
-  <%= link_to t("login.title"), login_path %>
-  <%= link_to t("login.register"), new_user_path%>
+  <div class="home">
+    <br>
+    <%= link_to t("login.title"), login_path %>
+    <%= link_to t("login.register"), new_user_path%>
+  </div>
 <% end %>
 
 <script>
@@ -42,3 +55,5 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 </script>
+
+<%= javascript_include_tag "movies", "data-turbo-track": "reload", defer: true %>

@@ -1,18 +1,43 @@
 .movie {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   margin-bottom: 20px;
-  width: 95%;
+  width: calc(100% - 10px);
+  height: 235px;
   gap: 20px;
+  z-index: 0;
+  overflow: hidden;
 }
 
-.movie-left {
+.movie::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: var(--background-image);
+  background-size: 100% 150%;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  transition: filter 0.3s ease;
+}
+
+.movie:hover::before {
+  filter: blur(4px) brightness(60%);
+}
+
+.movie.no-background { /* Película sin backdrop */
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.movie-left { /* Contenedor del poster */
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 150px; /* igual al ancho de la imagen */
-  flex-shrink: 0; /* para que no se achique */
+  width: 150px;
+  flex-shrink: 0;
 }
 
 .poster-wrapper {
@@ -22,12 +47,16 @@
 
 .movie-poster {
   width: 150px;
+  height: 225px;
+  margin-top: 3px;
+  margin-left: 10px;
   border-radius: 8px;
   display: block;
   cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.75);
 }
 
-.poster-button {
+.poster-button { /* Botón favorito */
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -44,45 +73,171 @@
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.movie-title {
+position: absolute;
+margin-top: 5px;
+font-size: 20px;
+background-color: rgba(0, 0, 0, 0.6);
+}
+
+.movie-overview {
+  margin-top: 25px;
+  font-size: 16px;
+  background-color: rgba(0, 0, 0, 0.6);
+  height: 110px;
+  overflow: scroll;
+  margin-right: 20px;
+}
+
+.movie-info {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
 .movie-rating {
-  margin-top: 8px;
+  margin-top: auto;
+  margin-bottom: 5px;
   font-size: 18px;
   color: #ccc;
   text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 12rem;
 }
 
-.movie-details {
-  flex-grow: 1;
-  max-width: calc(100% - 170px);
-}
-
-a.movie-card {
-  text-decoration: none;
-}
-
-.fa-star:hover, .fa-star-half-stroke:hover {
+.fa-star:hover, .fa-star-half-stroke:hover { /* Estrellas del rating */
   color: #ffae10;
   cursor: pointer;
- }
+}
 
- .movie-details-content {
+/* Vista Detalles */
+
+.movie-details-page {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.title-wrapper { /* Contenedor para el título */
+  width: 100%;
+  text-align: left;
+}
+
+.movie-details-title {
+  display: inline-block;
+  padding: 2px 5px;
+  position: relative;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.75);
+}
+  
+.movie-details-title {
+  text-align: start !important;
+  padding-left: 10px;
+  }
+
+.movie-details-content {
   display: flex;
   align-items: flex-start;
+  height: 100%;
+  margin-right: 5px;
  }
 
- .movie-details-poster img {
+.movie-details-poster {
+  position: relative;
+}
+
+.movie-details-poster img {
   width: 300px;
   height: 500px;
-  margin-right: 15px;
-  border: 2px solid #f83646;
+  margin-right: 10px;
+  border: 2px solid rgba(255, 0, 64, 1);
+  border-radius: 10px;
+}
+
+.details-poster-button { /* Botón favorito */
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: none;
+  bottom: 10px;
+  right: 20px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.details-poster-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.movie-details-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  width: 100%;
+  height: 490px;
+  padding: 5px;
+  margin-right: 10px;
+  background-size: 100% 100%;
+}
+
+ .movie-details-info h2 { /* Contenedor sinopsis */
+  margin: 0;
+  margin-top: 10px;
  }
 
- .movie-details-info {
-  overflow: hidden;
-  flex: 1
+ .movie-details-info strong { /* Título Sinopsis */
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
  }
 
- .movie-details-rating {
+ .movie-details-info p { /* Sinopsis */
+  background: rgba(0, 0, 0, 0.5);
+  overflow: scroll;
+  padding: 5px
+ }
+
+ .movie-details-rating { /* Rating */
+  margin-top: auto;
   font-size: 20px;
   text-align: center;
  }
+
+ .movie-details-rating .rating-content {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+/* Vista Home */
+
+#favorite_movies, #rated_movies, #watched_movies {
+ margin-left: 10px;
+}
+
+@media only screen and (max-width: 1150px) {
+  .movie-title {
+    overflow: scroll;
+    height: 30px;
+  }
+
+  .movie-details-poster img {
+    width: 40vw;
+    height: 60vh;
+  }
+
+  .movie-details-info {
+    width: 100%;
+    margin-left: 10px;
+    height: 60vh;
+    background-size: 100% 100%;
+  }
+
+  .movie-details-info p {
+    overflow: scroll;
+  }
+}

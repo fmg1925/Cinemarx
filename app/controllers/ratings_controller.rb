@@ -1,5 +1,5 @@
 class RatingsController < ApplicationController
-  before_action :require_login # make sure user is logged in
+  before_action :require_login
 
   API_KEY = ENV["API_KEY"]
   AUTH_TOKEN = ENV["TOKEN"]

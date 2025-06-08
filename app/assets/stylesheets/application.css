@@ -1,131 +1,261 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+* {
+  /* Color de las letras */
+  color: #ecf1f2;
+  font-family: 'Noto Serif', Arial, Helvetica, sans-serif;
+  text-shadow:
+    -0.5px -1px 0 black,
+    0.5px -1px 0 black,
+    -0.5px 1px 0 black,
+    0.5px 1px 0 black;
+}
 
-  * { /* Color de las letras */
-    color: #ecf1f2;
-    font-family: 'Noto Serif', Arial, Helvetica, sans-serif;
-    text-shadow:
-      -0.5px -1px 0 black,
-      0.5px -1px 0 black,
-      -0.5px  1px 0 black,
-      0.5px  1px 0 black;
-  }
-  
-  body { /* Color de fondo */
-    background: #1a1c20;
-    padding: 0;
+h1:not(#title), h2, h3 {
+  text-align: center;
+  margin-left: 0 !important;
+}
+
+h2 {
+  font-size: 24px !important;
+}
+
+h3 {
+  font-size: 20px !important;
+}
+
+body {
     margin: 0;
-  }
+    background-color: #000;
+    color: #eee;
+    font-size: 12px;
+}
 
+header {
+  display: flex;
+  height: 70px;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 50px;
+  position: relative;
+  z-index: 100;
+  background-color: rgba(113, 113, 113, 0.139);
+  backdrop-filter: blur(5px);
+}
+  
+header h1 {
+  font-size: 40px;
+  color: lightgray;
+}
+
+header a {
+  text-decoration: none;
+}
+  
+nav {
+  display: flex;
+  justify-content: space-evenly;
+  width: 90%;
+}
+  
+nav a {
+  text-decoration: none;
+  color: lightgray;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 0 10px;
+  transition: 0.4s;
+  text-shadow: 0 5px 10px #0e1217;
+}
+  
+nav a:hover {
+  color: #ff0040;
+}
+
+.search-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+}
+  
+.search-box form {
+  display: flex;
+  align-items: center;
+}
+  
+.search-box img {
+  display: block;
+  width: 22px;
+  background-color: black;
+  padding: 7px 10px;
+  margin-right: -1px;
+  border: 0.1rem solid black;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+  
+.search-box input {
+  padding: 8px 15px;
+  font-size: 16px;
+  color: #ecf1f2;
+  background-color: rgba(255, 0, 64, 0.9);
+  border: none;
+  outline : none;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-right: 30px;
+}
+
+.search-box input::placeholder {
+  color: #fff;
+  text-shadow:
+  -0.5px -0.5px 0 black,
+  0.5px -0.5px 0 black,
+  -0.5px 0.5px 0 black,
+  0.5px 0.5px 0 black;
+  font-style: italic;
+  opacity: 1;
+}
+
+#language-dropdown select {
+  background-color: black;
+  border: 1px solid rgba(255, 0, 64, 0.7);
+  border-radius: 2px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+h2, h3 {
+  font-size: 20px;
+  margin-left: 20px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+.pagination {
+  width: 100%;
+  margin-top: 10px;
+  padding-bottom: 20px;
+}
+
+.pagination span { /* Cada cuadro de paginación */
+  border: 1px solid rgba(255, 0, 64, 0.7);
+  padding: 10px;
+}
+
+.page.current { /* Página actual */
+  vertical-align: baseline !important;
+  font-size: 1.2rem !important;
+  font-weight: bold;
+  color: #ff0040;
+}
+
+.home {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home a {
+  text-decoration: none;
+  font-size: 20px;
+  background-color: #ff0040;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 10px;
+}
+
+.notice, .alert {
+  font-size: 24px;
+  text-align: center;
+}
+
+.notice {
+  color: lime;
+}
+
+.alert {
+  color: yellow;
+}
+
+.fondo {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  color: white;
+  padding: 0px;
+  overflow: visible;
+}
+
+.fondo::before {
+  content: "";
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: var(--bg-url);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media only screen and (max-width:1500px) {
+  .header-links {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (max-width:1150px) {
   header {
-    background: linear-gradient(#f83646, #1a1c20);
-    padding-left: 5px;
-    padding-bottom: 20px;
-  }
-
-  main {
-    margin-top: -20px;
-    margin-left: 10px;
-  }
-
-  h1, h2, h3 {
-    text-shadow:
-      -1.5px -1px 0 black,
-      1.5px -1px 0 black,
-      -1.5px  1px 0 black,
-      1.5px  1px 0 black;
-  }
-
-  input, button {
-    border: none;
-    background: rgba(248, 54, 70, 0.7);
-    border-radius: 3px;
-    padding: 2px;
-    margin: 2px;
-  }
-
-  label {
-    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 0;
+    padding-top: 50px;
+    padding-bottom: 70px;
+    background: linear-gradient(rgba(113, 113, 113, 0.333), #000000);
   }
 
   #title {
-    font-size: 3rem;
-    margin-bottom: 5px;
-    text-decoration: none;
-    text-shadow: 2px 2px 1px black;
+    margin: 0;
+    margin-top: 20px;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding-bottom: 10px;
   }
 
   .header-links {
-    margin-left: 2px;
-    text-decoration: none;
-    border-radius: 5px;
-    height: auto;
-    width: 30px;
-    padding: 3px;
-    background-color: #222a31;
-  }
-
-  #language-dropdown {
-    margin-left: 2px;
-    display: flex;
-    margin-top: 10px;
-    align-items: center;
+    display: inline-block;
+    padding: 5px;
+    text-align: center;
   }
 
   #language-dropdown select {
-   font-size: 16px;
-   background-color: #640500;
-   border-radius: 5px;
-   border: none;
-   padding: 2px 6px;
-   height: 100%;
-   margin: 2px 0;
+    margin-top: 10px;
+  }
+}
+
+@media only screen and (max-width:500px) {
+  h1, h2, h3 {
+    text-align: center;
   }
 
-  #title {
-    margin: 0;
+  header {
+    padding-top: 60px;
+    padding-bottom: 90px;
   }
-
-  table {
-    border: 2px solid #f83646;
-    border-radius: 5px;
-    padding: 2px;
-  }
-
-  td {
-    background: rgba(0, 0, 0, 0.5);
-  }
-
-  td * {
-    padding-right: 5px;
-  }
-
-  td input, td a {
-    padding-left: 5px;
-  }
-
-  a:not(#title, .header-links) {
-    text-decoration: none;
-    background: rgba(248, 54, 70, 0.7);
-    padding: 3px;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin: 2px;
-    border-radius: 3px;
-  }
-
-  @media only screen and (max-width:700px) {
-    .header-links {
-      display: inline-block;
-      margin-bottom: 5px;
-      width: auto;
-    }
-  }
+}

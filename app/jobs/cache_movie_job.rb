@@ -2,22 +2,23 @@ class CacheMovieJob < ApplicationJob
   queue_as :low_priority
 
   LANGUAGE_MAP = {
-    es: "es-MX",
-    en: "en-US",
-    ko: "ko-KR",
-    zh: "zh-CN"
+    es: 'es-MX',
+    en: 'en-US',
+    ko: 'ko-KR',
+    zh: 'zh-CN'
   }
 
   def cache_movie_data(movie, language)
     CachedMovie.upsert(
       {
-        movie_id: movie["id"],
+        movie_id: movie['id'],
         language: language,
-        title: movie["title"],
-        overview: movie["overview"],
-        poster_path: movie["poster_path"],
-        vote_average: movie["vote_average"],
-        vote_count: movie["vote_count"],
+        title: movie['title'],
+        overview: movie['overview'],
+        poster_path: movie['poster_path'],
+        backdrop_path: movie['backdrop_path'],
+        vote_average: movie['vote_average'],
+        vote_count: movie['vote_count'],
         updated_at: Time.current
       },
       unique_by: %i[movie_id language]
@@ -33,7 +34,7 @@ class CacheMovieJob < ApplicationJob
 
     uncached_languages.each do |lang_code|
       movie_url = "https://api.themoviedb.org/3/movie/#{movie_id}?language=#{lang_code}&api_key=#{api_key}"
-      response = HTTParty.get(movie_url, headers: { "Authorization" => "Bearer #{auth_token}" })
+      response = HTTParty.get(movie_url, headers: { 'Authorization' => "Bearer #{auth_token}" })
 
       if response.success?
         cache_movie_data(response.parsed_response, lang_code)

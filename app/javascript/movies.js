@@ -1,4 +1,4 @@
-function postToStoreMovies(movie) {
+function postToStoreMovies(movie) { // Cachear película ya cargada
   // Crear formulario
   const form = document.createElement("form");
   form.method = "POST";
@@ -47,6 +47,7 @@ document.addEventListener("turbo:load", () => {
       const overview = event.target.parentElement.getAttribute("overview");
       const poster_path =
         event.target.parentElement.getAttribute("poster_path");
+      const backdrop_path = event.target.parentElement.getAttribute("backdrop_path");
       const tmdb_vote_average =
         event.target.parentElement.getAttribute("vote_average");
       const tmdb_vote_count =
@@ -70,6 +71,7 @@ document.addEventListener("turbo:load", () => {
             title: title,
             overview: overview,
             poster_path: poster_path,
+            backdrop_path: backdrop_path,
             tmdb_vote_average: tmdb_vote_average,
             tmdb_vote_count: tmdb_vote_count,
           },
@@ -126,6 +128,9 @@ document.addEventListener("turbo:load", () => {
         });
     });
   });
+
+  // Favoritos
+
   const favoritos = document.querySelectorAll(".poster-button");
   let isSendingFavorite = false;
   favoritos.forEach((boton) => {
@@ -141,6 +146,8 @@ document.addEventListener("turbo:load", () => {
         event.target.parentElement.parentElement.getAttribute("overview");
       const poster_path =
         event.target.parentElement.parentElement.getAttribute("poster_path");
+      const backdrop_path =
+        event.target.parentElement.parentElement.getAttribute("backdrop_path");
       const tmdb_vote_average =
         event.target.parentElement.parentElement.getAttribute("vote-average");
       const tmdb_vote_count =
@@ -161,6 +168,7 @@ document.addEventListener("turbo:load", () => {
             title: title,
             overview: overview,
             poster_path: poster_path,
+            backdrop_path: backdrop_path,
             tmdb_vote_average: tmdb_vote_average,
             tmdb_vote_count: tmdb_vote_count,
           },
@@ -171,7 +179,6 @@ document.addEventListener("turbo:load", () => {
             window.location.href = "/login";
             return;
           }
-          const data = await response.json();
         })
         .catch((error) => {
           console.error("Error:", error);

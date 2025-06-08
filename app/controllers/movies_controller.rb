@@ -116,6 +116,7 @@ class MoviesController < ApplicationController
       "title" => cached.title,
       "overview" => cached.overview,
       "poster_path" => cached.poster_path,
+      "backdrop_path" => cached.backdrop_path,
       "vote_average" => cached.vote_average.to_f,
       "vote_count" => cached.vote_count.to_i
     )
@@ -133,6 +134,7 @@ class MoviesController < ApplicationController
           "title" => cached.title,
           "overview" => cached.overview,
           "poster_path" => cached.poster_path,
+          "backdrop_path" => cached.backdrop_path,
           "vote_average" => cached.vote_average.to_f,
           "vote_count" => cached.vote_count.to_i
           )
@@ -151,7 +153,7 @@ class MoviesController < ApplicationController
   end
 
   def store
-    movie_data = params.require(:movie).permit(:id, :title, :overview, :poster_path, :vote_average, :vote_count, :rating, :total_votes).to_h
+    movie_data = params.require(:movie).permit(:id, :title, :overview, :poster_path, :backdrop_path, :vote_average, :vote_count, :rating, :total_votes).to_h
     session[:movie] = movie_data
     redirect_to details_movies_path
   end
@@ -164,6 +166,7 @@ class MoviesController < ApplicationController
         title: movie["title"],
         overview: movie["overview"],
         poster_path: movie["poster_path"],
+        backdrop_path: movie["backdrop_path"],
         vote_average: movie["vote_average"],
         vote_count: movie["vote_count"],
         updated_at: Time.current

@@ -1,11 +1,13 @@
 class UsersController < ApplicationController
-  before_action :require_admin, only: [ :index, :destroy ]
+  before_action :require_admin, only: [ :index, :destroy, :edit, :update ]
   def index
     query = params[:query]
     users_scope = User.all
     users_scope = users_scope.where("username ILIKE :q", q: "%#{query}%") if query.present?
 
     @users = users_scope.page(params[:page]).per(10)
+    I18n.locale = params[:locale] || extract_locale_from_referer || :en
+    language = current_language_code
   end
 
   def new
@@ -15,8 +17,12 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      session[:user_id] = @user.id
-      redirect_to root_path, notice: t("users.created")
+      if admin?
+        redirect_to users_path, notice: t("users.created")
+      else
+        session[:user_id] = @user.id
+        redirect_to root_path, notice: t("users.created")
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -24,6 +30,8 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
+    I18n.locale = params[:locale] || extract_locale_from_referer || :en
+    language = current_language_code
   end
 
   def update
@@ -47,5 +55,27 @@ class UsersController < ApplicationController
     permitted = [ :username, :admin, :enabled ]
     permitted << :password << :password_confirmation if params[:user][:password].present?
     params.require(:user).permit(permitted)
+  end
+
+  def extract_locale_from_referer
+    URI.parse(request.referer || '').query
+       &.split('&')
+       &.map { |p| p.split('=') }
+       &.to_h&.[]('locale')
+       &.to_sym
+  rescue StandardError
+    nil
+  end
+
+  private
+
+  def current_language_code
+    case I18n.locale
+    when :es then 'es-MX'
+    when :en then 'en-US'
+    when :ko then 'ko-KR'
+    when :zh then 'zh-CN'
+    else 'en-US'
+    end
   end
 end

@@ -2,45 +2,50 @@
   <%= stylesheet_link_tag :users, "data-turbo-track": "reload" %>
 <% end %>
 
-<h1><%= t("login.registerTitle") %></h1>
+<% if !admin? %>
+  <h1><%= t("login.registerTitle") %></h1>
+<% else %>
+  <h1><%= t("users.create_user") %></h1>
+<% end %>
 
 <% if @user.errors.any? %>
   <div class="errors">
-    <ul>
-      <% @user.errors.messages.each do |attr, messages| %>
-        <% messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
+    <% @user.errors.messages.each do |attr, messages| %>
+      <% messages.each do |msg| %>
+        <p><%= msg %></p>
       <% end %>
-    </ul>
+    <% end %>
   </div>
 <% end %>
-
-<table>
+<% if admin? %>
+  <table id="create-user">
+<% else %>
+  <table>
+<% end %>
 <%= form_with model: @user, data: { turbo: false }, local: true do |form| %>
-<tr>
+  <tr>
     <td><%= form.label t("login.username") %></td>
     <td><%= form.text_field :username, required: true %></td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td><%= form.label t("login.password") %></td>
     <td><%= form.password_field :password, required: true %></td>
-</tr>
-<tr>
-  <td><%= form.label t("login.confirmpassword") %></td>
-  <td><%= form.password_field :password_confirmation, required: true %></td>
-</tr>
-<tr>
+  </tr>
+  <tr>
+    <td><%= form.label t("login.confirmpassword") %></td>
+    <td><%= form.password_field :password_confirmation, required: true %></td>
+  </tr>
   <% if admin? %>
     <tr>
       <td><%= form.label :admin, t("users.admin") %></td>
       <td><%= form.check_box :admin %></td>
-    <tr>
+    </tr>
   <% end %>
-</tr>
-<tr>
-  <td><%= form.submit t("login.register") %></td>
-  <td></td>
-</tr>
+  <tr>
+    <td colspan="2" style="text-align: center;">
+      <%= form.submit (admin?) ? t("users.create_user") : t("login.register"), id: "submit" %>
+    </td>
+  </tr>
 <% end %>
 </table>
+

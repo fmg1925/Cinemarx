@@ -1,13 +1,18 @@
-<div class="movie">
+<% if movie['backdrop_path'].present? %>
+  <div class="movie" style="--background-image: url('https://image.tmdb.org/t/p/w1280<%= movie['backdrop_path'] %>');">
+<% else %>
+  <div class="movie no-background">
+<% end %>
   <div class="movie-left">
     <% user_rating = current_user&.ratings&.find_by(movie_id: movie['id'])&.score || 0 %>
     <% favorite = current_user&.favorite_movies&.find_by(movie_id: movie['id']) || false %>
-    <div class="poster-wrapper" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>">
+    <div class="poster-wrapper" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>" backdrop_path="<% movie['backdrop_path'] %>">
       <%= form_tag store_movies_path, method: :post, data: { turbo: false } do %>
       <%= hidden_field_tag 'movie[id]', movie['id'] %>
       <%= hidden_field_tag 'movie[title]', movie['title'] %>
       <%= hidden_field_tag 'movie[overview]', movie['overview'] %>
       <%= hidden_field_tag 'movie[poster_path]', movie['poster_path'] %>
+      <%= hidden_field_tag 'movie[backdrop_path]', movie['backdrop_path'] %>
       <%= hidden_field_tag 'movie[vote_average]', movie['vote_average'] %>
       <%= hidden_field_tag 'movie[vote_count]', movie['vote_count'] %>
       <%= hidden_field_tag 'movie[rating]', movie['rating'] %>
@@ -22,31 +27,36 @@
       <%= button_tag(favorite ? '💛' : '❤️', class: "poster-button", type: 'button') %>
       <% end %>
     </div>
-    <div class="movie-rating" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>">
+  </div>
+  <div class="movie-info">
+    <div class="movie-details">
+      <strong class="movie-title"><%= movie['title'] %></strong><br>
+      <p class="movie-overview"><%= movie['overview'] != "" ? movie['overview'] : t("no_synopsis_available") %></p><br>
+    </div>
+    <div class="movie-rating" data-movie-id="<%= movie["id"] %>" vote-count="<%= movie['vote_count'] %>" vote-average="<%= movie['vote_average'] %>" ratings-text="<%= t('ratings') %>" title="<%= movie['title'] %>" overview="<%= movie['overview'] %>" poster_path="<%= movie['poster_path'] %>" backdrop_path="<% movie['backdrop_path'] %>">
       <% rating = (movie['rating'] || 0).to_f %>
-
       <% 1.upto(5) do |i| %>
-        <% star_class = 
-          if rating >= i
-            "fa-solid"
-          elsif rating >= i - 0.5
-            "fa-solid fa-star-half-stroke"
-          else
-            "fa-regular"
-          end
-        %>
-        <% star_color = (user_rating >= i - 0.5) ? "color: #ffae10" : "" %>
+      <% star_class = 
+        if rating >= i
+          "fa-solid"
+        elsif rating >= i - 0.5
+          "fa-solid fa-star-half-stroke"
+        else
+          "fa-regular"
+        end
+      %>
+      <% star_color = (user_rating >= i - 0.5) ? "color: #ffae10" : "" %>
         <i class="fa-star <%= star_class %> star" style="<%= star_color %>" data-score="<%= i %>"></i>
       <% end %>
-      <br>
       <span class="rating-score">
-        <%= number_with_precision(rating, precision: 1) %> / 5 (<%= movie['total_votes'] %> <%= t("ratings") %>)
+        <span>
+          <%= number_with_precision(rating, precision: 1) %> / 5
+        </span>
+        <br>
+        <span>
+          (<%= movie['total_votes'] %> <%= t("ratings") %>)
+        </span>
       </span>
     </div>
-  </div>
-
-  <div class="movie-details">
-    <strong><%= movie['title'] %></strong><br>
-    <%= movie['overview'] %><br>
   </div>
 </div>
