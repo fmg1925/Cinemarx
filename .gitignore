@@ -1,0 +1,53 @@
+# See https://github.com/github/gitignore/blob/main/Rails.gitignore for updates
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+/tmp
+!/tmp/.keep
+
+# Ignore PID files, storage, and cache.
+/tmp/pids
+/tmp/cache
+/tmp/sockets
+/public/assets
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+.byebug_history
+/storage/*
+!/storage/.keep
+
+# Ignore master key for decrypting credentials and other sensitive files.
+/config/master.key
+/config/credentials/*.key
+
+# dotenv environment variable files
+.env*
+!.env.example
+
+# Ignore system files
+.DS_Store
+*.swp
+*.swo
+
+# Ignore coverage reports from testing tools like SimpleCov
+coverage/
+
+# Ignore debug files
+*.rbc
+*.sassc
+
+# Ignore editor config
+*.vscode/
+.idea/
+
+# Ignore Mac system files
+*.DS_Store
+
+database.yml
+!database.example.yml

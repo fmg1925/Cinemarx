@@ -20,6 +20,7 @@ td {
     vertical-align: middle;
     padding: 10px;
     padding-left: 5px;
+    padding-right: 5px;
     border-radius: 10px;
 }
 
@@ -114,6 +115,10 @@ button {
 
 #user-search {
     text-align: center;
+}
+
+#query::placeholder {
+    font-style: italic;
 }
 
 @media only screen and (max-width:1150px) {

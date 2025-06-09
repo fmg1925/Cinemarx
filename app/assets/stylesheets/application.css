@@ -254,8 +254,14 @@ h3 {
     text-align: center;
   }
 
+  #title {
+    margin-top: 0px;
+  }
+
   header {
-    padding-top: 60px;
-    padding-bottom: 90px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
   }
 }
