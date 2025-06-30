@@ -41,6 +41,7 @@ ko:
     enabled: "활성화됨:"
     favoritemovies: "당신이 좋아하는 영화:"
     search: "사용자 검색:"
+    no_comments: "아직 댓글을 작성하지 않았습니다."
   edit: "수정"
   delete: "삭제"
   ratings: "평점"
@@ -70,3 +71,60 @@ ko:
   showmore: "더 보기"
   populars: "인기"
   no_synopsis_available: "줄거리 정보가 없습니다."
+  comments:
+    edit: "수정"
+    delete: "삭제"
+    update: "업데이트"
+    cancel: "취소"
+    are_you_sure: "정말로 삭제하시겠습니까?"
+    ago: "%{time} 전"
+    created_success: "댓글이 성공적으로 작성되었습니다."
+    updated_success: "댓글이 성공적으로 수정되었습니다."
+    deleted_success: "댓글이 성공적으로 삭제되었습니다."
+    no_permission: "이 댓글을 수정할 권한이 없습니다."
+    already_commented: "이미 이 영화에 댓글을 작성하셨습니다."
+    error_creating: "댓글 작성 중 오류가 발생했습니다."
+    error_updating: "댓글 수정 중 오류가 발생했습니다."
+    error_deleting: "댓글 삭제 중 오류가 발생했습니다."
+    comments:
+    title: "댓글"
+    add_comment: "댓글 추가"
+    label_content: "댓글"
+    submit: "보내기"
+    no_comments: "이 영화에 대한 댓글이 없습니다."
+  datetime:
+    distance_in_words:
+      half_a_minute: "30초"
+      less_than_x_seconds:
+        one:   "1초 미만"
+        other: "%{count}초 미만"
+      x_seconds:
+        one:   "1초"
+        other: "%{count}초"
+      less_than_x_minutes:
+        one:   "1분 미만"
+        other: "%{count}분 미만"
+      x_minutes:
+        one:   "1분"
+        other: "%{count}분"
+      about_x_hours:
+        one:   "약 1시간"
+        other: "약 %{count}시간"
+      x_days:
+        one:   "1일"
+        other: "%{count}일"
+      about_x_months:
+        one:   "약 1개월"
+        other: "약 %{count}개월"
+      x_months:
+        one:   "1개월"
+        other: "%{count}개월"
+      about_x_years:
+        one:   "약 1년"
+        other: "약 %{count}년"
+      over_x_years:
+        one:   "1년 이상"
+        other: "%{count}년 이상"
+      almost_x_years:
+        one:   "거의 1년"
+        other: "거의 %{count}년"

@@ -9,15 +9,7 @@
       <h1 class="movie-details-title"><%= @movie["title"] %></h1>
     </div>
     <div class="movie-details-content">
-      <div class="movie-details-poster"
-     data-movie-id="<%= @movie['id'] %>"
-     data-vote-count="<%= @movie['vote_count'] %>"
-     data-vote-average="<%= @movie['vote_average'] %>"
-     data-title="<%= @movie['title'] %>"
-     data-overview="<%= @movie['overview'] %>"
-     data-poster-path="<%= @movie['poster_path'] %>"
-     data-backdrop-path="<%= @movie['backdrop_path'] %>"
->
+      <div class="movie-details-poster" data-movie-id="<%= @movie['id'] %>" data-vote-count="<%= @movie['vote_count'] %>" data-vote-average="<%= @movie['vote_average'] %>" data-title="<%= @movie['title'] %>" data-overview="<%= @movie['overview'] %>" data-poster-path="<%= @movie['poster_path'] %>" data-backdrop-path="<%= @movie['backdrop_path'] %>">
         <%= button_tag(favorite ? '💛' : '❤️', class: "details-poster-button", type: 'button') %>
         <%= image_tag(@movie["poster_path"] ? "https://image.tmdb.org/t/p/w500#{@movie["poster_path"]}" : asset_path('placeholder.png'), alt: @movie["title"]) %>
       </div>
@@ -32,7 +24,7 @@
         <% user_count = Rating.where(movie_id: @movie['id']).count %>
         <% total_votes = @movie['vote_count'].to_i + user_count %>
 
-        <div class="movie-details-rating">
+        <div class="movie-details-rating" data-movie-id="<%= @movie['id'] %>" data-title="<%= @movie['title'] %>" data-overview="<%= @movie['overview'] %>" data-poster-path="<%= @movie['poster_path'] %>" data-backdrop-path="<%= @movie['backdrop_path'] %>" data-vote-average="<%= @movie['vote_average'] %>" data-vote-count="<%= @movie['vote_count'] %>" data-ratings-text="<%= t('ratings') %>">
           <div class="rating-content">
             <% rating = (@movie['rating'].to_f) == 0 ? user_rating : (@movie['rating'].to_f) %>
             <% 1.upto(5) do |i| %>
@@ -57,9 +49,49 @@
       </div>
     </div>
   </div>
-  
-<% else %>
-  <p><%= t("movies.nomovieinfo") %></p>
+  <div class="comments">
+    <h2><%= t("comments.title") %></h2>
+    <% user_comment = current_user&.comments&.find_by(movie_id: @movie['id']) %>
+    <div class="add-comment" id="add-comment-form" style="<%= user_comment.present? ? 'display:none;' : '' %>">
+      <h3><%= t("comments.add_comment") %></h3>
+      <%= form_with(model: Comment) do |form| %>
+        <%= form.hidden_field :movie_id, value: @movie['id'] %>
+          <%= form.text_area :content, rows: 2, class: "comment-textarea" %>
+          <br>
+          <%= form.submit t("comments.submit") %>
+      <% end %>
+    </div>
+
+    <div class="comments-list">
+      <% if @comments.any? %>
+        <%= render partial: "comments/comment", collection: @comments, as: :comment, locals: { movie: @movie } %>
+      <% else %>
+        <div class="comment-item">
+          <p><%= t("comments.no_comments") %></p>
+        </div>
+      <% end %>
+    </div>
 <% end %>
 
 <%= javascript_include_tag "movie_details", "data-turbo-track": "reload", defer: true %>
+
+<script>
+document.addEventListener("turbo:load", function() {
+  document.body.addEventListener("click", function(e) {
+    // Editar comentario
+    if (e.target.matches(".edit-comment")) {
+      e.preventDefault();
+      var id = e.target.dataset.commentId;
+      document.getElementById("comment-content-" + id).style.display = "none";
+      document.getElementById("edit-comment-form-" + id).style.display = "block";
+    }
+    // Cancelar edición
+    if (e.target.matches(".cancel-edit")) {
+      e.preventDefault();
+      var id = e.target.dataset.commentId;
+      document.getElementById("edit-comment-form-" + id).style.display = "none";
+      document.getElementById("comment-content-" + id).style.display = "block";
+    }
+  });
+});
+</script>

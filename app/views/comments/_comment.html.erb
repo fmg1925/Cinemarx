@@ -1,0 +1,23 @@
+<div class="comment-item" id="comment-<%= comment.id %>">
+  <div class="comment-header">
+    <strong><%= comment.user.username %></strong>
+    <span class="comment-date"><%= t("comments.ago", time: time_ago_in_words(comment.created_at)) %></span>
+    <% if comment.user == current_user %>
+    <%= link_to t("comments.edit"), "#", class: "edit-comment", data: { comment_id: comment.id } %>
+    <% end %>
+    <% if comment.user == current_user || current_user&.admin? %>
+      <%= link_to t("comments.delete"), comment_path(comment), method: :delete, data: { confirm: t("comments.are_you_sure"), remote: true }, class: "delete-comment" %>
+    <% end %>
+  </div>
+  <div class="comment-body" id="comment-content-<%= comment.id %>">
+    <p><%= comment.content %></p>
+  </div>
+  
+  <div class="edit-comment-form" id="edit-comment-form-<%= comment.id %>" style="display:none;">
+    <%= form_with(model: comment, local: true, html: { class: "inline-edit-form" }) do |form| %>
+      <%= form.text_area :content, rows: 2 %>
+      <%= form.submit t("comments.update") %>
+      <button type="button" class="cancel-edit" data-comment-id="<%= comment.id %>"><%= t("comments.cancel") %></button>
+    <% end %>
+  </div>
+</div>

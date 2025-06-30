@@ -1,6 +1,7 @@
 <!-- app/views/home/index.html.erb --> <!-- Página principal -->
 <% content_for :stylesheets do %>
   <%= stylesheet_link_tag :movies, "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag :comments, "data-turbo-track": "reload" %>
 <% end %>
 
 <% if logged_in? %>
@@ -41,6 +42,16 @@
     <% else %>
       <p><%= t("movies.nomovies") %></p>
     <% end %>
+  <% end %>
+
+  <% if @comments.any? %>
+    <div class="comments-list">
+      <%= render partial: "comments/home_comment", collection: @comments, as: :comment, locals: { movie: @movie } %>
+    </div>
+  <% else %>
+  <div class="comment-item">
+    <p><%= t("users.no_comments") %></p>
+  </div>
   <% end %>
 <% else %>
   <div class="home">

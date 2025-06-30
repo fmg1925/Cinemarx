@@ -23,5 +23,7 @@ Rails.application.routes.draw do
 
   get "rated_movies", to: "movies#rated_movies"
 
+  resources :comments, only: [:index, :create, :edit, :update, :destroy]
+
   get "up" => "rails/health#show", as: :rails_health_check
 end

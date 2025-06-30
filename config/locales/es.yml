@@ -41,6 +41,7 @@ es:
     enabled: "Habilitado:"
     favoritemovies: "Tus películas favoritas:"
     search: "Buscar usuarios:"
+    no_comments: "No has escrito ningún comentario."
   edit: "Editar"
   delete: "Eliminar"
   ratings: "Calificaciones"
@@ -70,3 +71,60 @@ es:
   showmore: "Mostrar más"
   populars: "Populares"
   no_synopsis_available: "No hay sinopsis disponible."
+  comments:
+    edit: "Editar"
+    delete: "Eliminar"
+    update: "Actualizar"
+    cancel: "Cancelar"
+    are_you_sure: "¿Estás seguro?"
+    ago: "hace %{time}"
+    created_success: "Comentario creado exitosamente."
+    updated_success: "Comentario actualizado exitosamente."
+    deleted_success: "Comentario eliminado exitosamente."
+    no_permission: "No tienes permiso para editar este comentario."
+    already_commented: "Ya has comentado esta película."
+    error_creating: "Error al crear el comentario."
+    error_updating: "Error al actualizar el comentario."
+    error_deleting: "Error al eliminar el comentario."
+    comments:
+    title: "Comentarios"
+    add_comment: "Añadir comentario"
+    label_content: "Comentario"
+    submit: "Enviar"
+    no_comments: "No hay comentarios para esta película."
+  datetime:
+    distance_in_words:
+      half_a_minute: "medio minuto"
+      less_than_x_seconds:
+        one:   "menos de 1 segundo"
+        other: "menos de %{count} segundos"
+      x_seconds:
+        one:   "1 segundo"
+        other: "%{count} segundos"
+      less_than_x_minutes:
+        one:   "menos de un minuto"
+        other: "menos de %{count} minutos"
+      x_minutes:
+        one:   "1 minuto"
+        other: "%{count} minutos"
+      about_x_hours:
+        one:   "alrededor de 1 hora"
+        other: "alrededor de %{count} horas"
+      x_days:
+        one:   "1 día"
+        other: "%{count} días"
+      about_x_months:
+        one:   "alrededor de 1 mes"
+        other: "alrededor de %{count} meses"
+      x_months:
+        one:   "1 mes"
+        other: "%{count} meses"
+      about_x_years:
+        one:   "alrededor de 1 año"
+        other: "alrededor de %{count} años"
+      over_x_years:
+        one:   "más de 1 año"
+        other: "más de %{count} años"
+      almost_x_years:
+        one:   "casi 1 año"
+        other: "casi %{count} años"

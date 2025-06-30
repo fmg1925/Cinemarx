@@ -41,6 +41,7 @@ zh:
     enabled: "已启用："
     favoritemovies: "你最喜欢的电影："
     search: "搜索用户："
+    no_comments: "你还没有写任何评论。"
   edit: "编辑"
   delete: "删除"
   ratings: "评分"
@@ -70,3 +71,59 @@ zh:
   showmore: "显示更多"
   populars: "热门"
   no_synopsis_available: "暂无简介。"
+  comments:
+    edit: "编辑"
+    delete: "删除"
+    update: "更新"
+    cancel: "取消"
+    are_you_sure: "你确定吗？"
+    ago: "%{time}前"
+    created_success: "评论创建成功。"
+    updated_success: "评论更新成功。"
+    deleted_success: "评论删除成功。"
+    no_permission: "你没有权限编辑此评论。"
+    already_commented: "你已经评论过这部电影。"
+    error_creating: "创建评论时出错。"
+    error_updating: "更新评论时出错。"
+    error_deleting: "删除评论时出错。"
+    title: "评论"
+    add_comment: "添加评论"
+    label_content: "评论"
+    submit: "发送"
+    no_comments: "这部电影还没有评论。"
+  datetime:
+    distance_in_words:
+      half_a_minute: "半分钟"
+      less_than_x_seconds:
+        one:   "不到1秒"
+        other: "不到%{count}秒"
+      x_seconds:
+        one:   "1秒"
+        other: "%{count}秒"
+      less_than_x_minutes:
+        one:   "不到1分钟"
+        other: "不到%{count}分钟"
+      x_minutes:
+        one:   "1分钟"
+        other: "%{count}分钟"
+      about_x_hours:
+        one:   "大约1小时"
+        other: "大约%{count}小时"
+      x_days:
+        one:   "1天"
+        other: "%{count}天"
+      about_x_months:
+        one:   "大约1个月"
+        other: "大约%{count}个月"
+      x_months:
+        one:   "1个月"
+        other: "%{count}个月"
+      about_x_years:
+        one:   "大约1年"
+        other: "大约%{count}年"
+      over_x_years:
+        one:   "超过1年"
+        other: "超过%{count}年"
+      almost_x_years:
+        one:   "接近1年"
+        other: "接近%{count}年"

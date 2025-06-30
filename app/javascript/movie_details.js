@@ -11,17 +11,14 @@ document.addEventListener("turbo:load", () => {
       if (isSending) return;
       isSending = true;
       const score = event.target.dataset.score; // Conseguir la puntuación
-      const title = event.target.parentElement.getAttribute("title");
-      const overview = event.target.parentElement.getAttribute("overview");
-      const poster_path =
-        event.target.parentElement.getAttribute("poster_path");
-      const backdrop_path =
-        event.target.parentElement.getAttribute("backdrop_path");
-      const tmdb_vote_average =
-        event.target.parentElement.getAttribute("vote-average");
-      const tmdb_vote_count =
-        event.target.parentElement.getAttribute("vote-count");
-      const movieId = event.target.parentElement.dataset.movieId; // Conseguir la id de la película
+      const ratingContainer = event.target.closest('.movie-details-rating');
+      const movieId = ratingContainer.dataset.movieId;
+      const title = ratingContainer.dataset.title;
+      const overview = ratingContainer.dataset.overview;
+      const poster_path = ratingContainer.dataset.posterPath;
+      const backdrop_path = ratingContainer.dataset.backdropPath;
+      const tmdb_vote_average = ratingContainer.dataset.voteAverage;
+      const tmdb_vote_count = ratingContainer.dataset.voteCount;
       fetch("/ratings", {
         // Enviar a la base de datos
         method: "POST",
@@ -63,15 +60,12 @@ document.addEventListener("turbo:load", () => {
               `.movie-details-rating[data-movie-id="${movieId}"]`
             );
             if (ratingDiv) {
-              const voteAverageRaw = ratingDiv.getAttribute("vote-average");
-              const voteAverage = parseFloat(voteAverageRaw) / 2;
-              const dbRatings = parseFloat(data.ratings);
-              const voteCount = parseInt(
-                ratingDiv.getAttribute("vote-count"),
-                10
-              );
-              const dbCount = parseInt(data.count, 10);
-              const ratingsText = ratingDiv.getAttribute("ratings-text") || "";
+              const voteAverageRaw = ratingDiv.dataset.voteAverage;
+              const voteAverage = parseFloat(voteAverageRaw) ? parseFloat(voteAverageRaw) / 2 : 0;
+              const dbRatings = parseFloat(data.ratings) || 0;
+              const voteCount = parseInt(ratingDiv.dataset.voteCount, 10);
+              const dbCount = parseInt(data.count, 10) || 0;
+              const ratingsText = ratingDiv.dataset.ratingsText || "";
               const totalRatingSum =
                 voteAverage * voteCount + dbRatings * dbCount;
               const totalVotes = voteCount + dbCount;

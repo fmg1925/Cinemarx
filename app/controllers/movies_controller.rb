@@ -1,5 +1,6 @@
 # app/controllers/movies_controller.rb
 class MoviesController < ApplicationController
+  require 'erb'
   API_KEY = ENV["API_KEY"]
   AUTH_TOKEN = ENV["TOKEN"]
 
@@ -54,7 +55,8 @@ class MoviesController < ApplicationController
     I18n.locale = params[:locale] || extract_locale_from_referer || :en
     language = current_language_code
 
-    api_url = "https://api.themoviedb.org/3/search/movie?api_key=#{API_KEY}&query=#{query}&language=#{language}&page=#{page}"
+    encoded_query = ERB::Util.url_encode(query)
+    api_url = "https://api.themoviedb.org/3/search/movie?api_key=#{API_KEY}&query=#{encoded_query}&language=#{language}&page=#{page}"
 
     response = HTTParty.get(api_url, headers: { "Authorization" => "Bearer #{AUTH_TOKEN}" })
 
@@ -110,6 +112,7 @@ class MoviesController < ApplicationController
     language = current_language_code
 
     cached = CachedMovie.find_by(movie_id: movie_id, language: language)
+    @comments = Comment.where(movie_id: movie_id).includes(:user).order(created_at: :desc)
 
     if cached
       @movie = movie_session.merge(

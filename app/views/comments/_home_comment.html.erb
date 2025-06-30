@@ -1,0 +1,19 @@
+<div class="comment-item" id="comment-<%= comment.id %>" style="cursor:pointer; color:#ff0040; font-weight:bold;"
+      onclick="postToStoreMovies({ id: '<%= comment.movie_id %>' })">
+  <div class="comment-header">
+    <strong><%= comment.user.username %></strong>
+    <span class="comment-date"><%= t("comments.ago", time: time_ago_in_words(comment.created_at)) %></span>
+    <span class="comment-movie-title"><%= @cached_movies[comment.movie_id]&.title || "Película desconocida" %></span>
+  </div>
+  <div class="comment-body" id="comment-content-<%= comment.id %>">
+    <p><%= comment.content %></p>
+  </div>
+  
+  <div class="edit-comment-form" id="edit-comment-form-<%= comment.id %>" style="display:none;">
+    <%= form_with(model: comment, local: true, html: { class: "inline-edit-form" }) do |form| %>
+      <%= form.text_area :content, rows: 2 %>
+      <%= form.submit t("comments.update") %>
+      <button type="button" class="cancel-edit" data-comment-id="<%= comment.id %>"><%= t("comments.cancel") %></button>
+    <% end %>
+  </div>
+</div>

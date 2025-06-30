@@ -9,6 +9,8 @@
   gap: 20px;
   z-index: 0;
   overflow: hidden;
+  border: 1px solid rgba(255, 0, 64, 1);
+  border-radius: 5px;
 }
 
 .movie::before {
@@ -17,8 +19,8 @@
   top: 0; left: 0;
   width: 100%; height: 100%;
   background-image: var(--background-image);
-  background-size: 100% 150%;
-  background-position: center;
+  background-size: calc(100% - 160px) 250%;
+  background-position: right center;
   background-repeat: no-repeat;
   z-index: -1;
   transition: filter 0.3s ease;
@@ -53,7 +55,7 @@
   border-radius: 8px;
   display: block;
   cursor: pointer;
-  border: 2px solid rgba(0, 0, 0, 0.75);
+  border: 2px solid rgba(236, 241, 242, 1)
 }
 
 .poster-button { /* Botón favorito */
@@ -180,6 +182,8 @@ background-color: rgba(0, 0, 0, 0.6);
   padding: 5px;
   margin-right: 10px;
   background-size: 100% 100%;
+  border: 2px solid rgba(255, 0, 64, 1);
+  border-radius: 5px;
 }
 
  .movie-details-info h2 { /* Contenedor sinopsis */
@@ -240,4 +244,88 @@ background-color: rgba(0, 0, 0, 0.6);
   .movie-details-info p {
     overflow: scroll;
   }
+}
+
+.add-comment,
+.form-group {
+  width: 100%;
+  min-width: 0;
+}
+
+.comments {
+  width: 100%;
+  min-width: 0;
+}
+
+.comments textarea, .comments input {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 0, 64, 1);
+  border-radius: 2px;
+  margin: 5px;;
+}
+
+#add-comment-form form {
+  width: 100% !important;
+}
+
+.add-comment {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  padding-top: 0px;
+  background-color: rgba(236, 241, 242, 0.1);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.add-comment h3 {
+  color: #ecf1f2;
+  font-size: 24px;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.comment-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: rgba(236, 241, 242, 0.1);
+  border-radius: 8px;
+  margin: 10px;
+  margin-top: 0px;
+}
+
+.comment-item strong {
+  font-size: 24px;
+  color: #ecf1f2;
+
+  padding: 0;
+}
+
+.comment-item p, .comment-item span {
+  font-size: 16px;
+  color: #ccc;
+  margin: 5px;
+}
+
+.comment-item a {
+  font-size: 16px;
+  margin-right: 5px;
+}
+
+.comment-textarea {
+  width: 98% !important;
+  box-sizing: border-box !important;
+  resize: vertical !important; /* Permite redimensionar solo verticalmente */
+  margin: 0 auto !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.cancel-edit {
+  background-color: rgba(255, 0, 64, 1);
+  border: 2px solid black;
 }

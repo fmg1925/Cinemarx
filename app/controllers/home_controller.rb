@@ -15,6 +15,10 @@ class HomeController < ApplicationController
     user_ratings = current_user.ratings.order(created_at: :desc)
     watched = current_user.watched_movies.order(created_at: :desc)
 
+    @comments = current_user.comments.order(created_at: :desc)
+
+    @cached_movies = CachedMovie.where(movie_id: @comments.map(&:movie_id), language: language).index_by(&:movie_id)
+
     favorite_ids = favorites.pluck(:movie_id)
     rating_ids = user_ratings.pluck(:movie_id)
 
