@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class RatingsController < ApplicationController
   before_action :require_login
 
-  API_KEY = ENV["API_KEY"]
-  AUTH_TOKEN = ENV["TOKEN"]
+  API_KEY = ENV['API_KEY']
+  AUTH_TOKEN = ENV['TOKEN']
 
   def create
     rating = Rating.find_or_initialize_by(user_id: current_user.id, movie_id: params[:rating][:movie_id])
@@ -29,13 +31,13 @@ class RatingsController < ApplicationController
   def cache_movie_data(movie, language)
     CachedMovie.upsert(
       {
-        movie_id: movie["id"],
+        movie_id: movie['id'],
         language: language,
-        title: movie["title"],
-        overview: movie["overview"],
-        poster_path: movie["poster_path"],
-        vote_average: movie["vote_average"],
-        vote_count: movie["vote_count"],
+        title: movie['title'],
+        overview: movie['overview'],
+        poster_path: movie['poster_path'],
+        vote_average: movie['vote_average'],
+        vote_count: movie['vote_count'],
         updated_at: Time.current
       },
       unique_by: %i[movie_id language]
@@ -46,11 +48,11 @@ class RatingsController < ApplicationController
 
   def current_language_code
     case I18n.locale
-    when :es then "es-MX"
-    when :en then "en-US"
-    when :ko then "ko-KR"
-    when :zh then "zh-CN"
-    else "en-US"
+    when :es then 'es-MX'
+    when :en then 'en-US'
+    when :ko then 'ko-KR'
+    when :zh then 'zh-CN'
+    else 'en-US'
     end
   end
 end

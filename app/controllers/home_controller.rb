@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class HomeController < ApplicationController
-  API_KEY = ENV["API_KEY"]
-  AUTH_TOKEN = ENV["TOKEN"]
+  API_KEY = ENV['API_KEY']
+  AUTH_TOKEN = ENV['TOKEN']
   def index
     return unless logged_in?
 
@@ -38,7 +40,7 @@ class HomeController < ApplicationController
       rating = Rating.find_by(user_id: current_user.id, movie_id: favoritemovie.movie_id)
       total_votes = tmdb_votes + user_count
 
-      combined = total_votes > 0 ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
+      combined = total_votes.positive? ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
       {
         'id' => favoritemovie.movie_id,
         'title' => cached.title,
@@ -70,7 +72,7 @@ class HomeController < ApplicationController
       user_count = Rating.where(movie_id: movie_id).count
       total_votes = tmdb_votes + user_count
 
-      combined = total_votes > 0 ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
+      combined = total_votes.positive? ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
 
       {
         'id' => movie_id,
@@ -101,7 +103,7 @@ class HomeController < ApplicationController
       user_count = Rating.where(movie_id: watchedmovie.movie_id).count
       total_votes = tmdb_votes + user_count
 
-      combined = total_votes > 0 ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
+      combined = total_votes.positive? ? ((tmdb_rating_5 * tmdb_votes + user_avg * user_count) / total_votes) : tmdb_rating_5
 
       {
         'id' => watchedmovie.movie_id,
@@ -145,7 +147,7 @@ class HomeController < ApplicationController
 
           total_votes = tmdb_votes + user_count
 
-          combined = if total_votes > 0
+          combined = if total_votes.positive?
                        ((tmdb_rating_5 * tmdb_votes) + (user_avg * user_count)) / total_votes
                      else
                        tmdb_rating_5
@@ -161,9 +163,11 @@ class HomeController < ApplicationController
         format.html
         format.turbo_stream do
           render turbo_stream: [
-            turbo_stream.replace('favorite_movies', partial: 'home/favorite_movies', locals: { favorite_movies: @favorite_movies }),
+            turbo_stream.replace('favorite_movies', partial: 'home/favorite_movies',
+                                                    locals: { favorite_movies: @favorite_movies }),
             turbo_stream.replace('rated_movies', partial: 'home/rated_movies', locals: { rated_movies: @rated_movies }),
-            turbo_stream.replace('watched_movies', partial: 'home/watched_movies', locals: { watched_movies: @watched_movies })
+            turbo_stream.replace('watched_movies', partial: 'home/watched_movies',
+                                                   locals: { watched_movies: @watched_movies })
           ]
         end
       end

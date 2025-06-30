@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FavoriteMovie < ApplicationRecord
   belongs_to :user
 

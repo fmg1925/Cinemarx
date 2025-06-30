@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
@@ -23,9 +25,9 @@ class ApplicationController < ActionController::Base
   end
 
   def enabled?
-    unless current_user&.enabled?
-      reset_session
-    end
+    return if current_user&.enabled?
+
+    reset_session
   end
 
   def admin?
@@ -37,6 +39,6 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin
-    redirect_to login_path, alert: t("errors.not_authorized") unless admin?
+    redirect_to login_path, alert: t('errors.not_authorized') unless admin?
   end
 end

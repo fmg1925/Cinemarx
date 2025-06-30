@@ -1,6 +1,8 @@
-class Comment < ApplicationRecord
-    belongs_to :user
+# frozen_string_literal: true
 
-    validates :movie_id, presence: true
-    validates :user_id, presence: true
+class Comment < ApplicationRecord
+  belongs_to :user
+
+  validates :movie_id, presence: true
+  validates :user_id, presence: true
 end

@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-  before_action :require_admin, only: [ :index, :destroy, :edit, :update ]
+  before_action :require_admin, only: %i[index destroy edit update]
   def index
     query = params[:query]
     users_scope = User.all
-    users_scope = users_scope.where("username ILIKE :q", q: "%#{query}%") if query.present?
+    users_scope = users_scope.where('username ILIKE :q', q: "%#{query}%") if query.present?
 
     @users = users_scope.page(params[:page]).per(10)
     I18n.locale = params[:locale] || extract_locale_from_referer || :en
-    language = current_language_code
+    current_language_code
   end
 
   def new
@@ -18,10 +20,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       if admin?
-        redirect_to users_path, notice: t("users.created")
+        redirect_to users_path, notice: t('users.created')
       else
         session[:user_id] = @user.id
-        redirect_to root_path, notice: t("users.created")
+        redirect_to root_path, notice: t('users.created')
       end
     else
       render :new, status: :unprocessable_entity
@@ -31,13 +33,13 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
     I18n.locale = params[:locale] || extract_locale_from_referer || :en
-    language = current_language_code
+    current_language_code
   end
 
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      redirect_to users_path, notice: t("users.edited")
+      redirect_to users_path, notice: t('users.edited')
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,13 +48,13 @@ class UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     @user.destroy
-    redirect_to users_path, notice: t("users.deleted")
+    redirect_to users_path, notice: t('users.deleted')
   end
 
   private
 
   def user_params
-    permitted = [ :username, :admin, :enabled ]
+    permitted = %i[username admin enabled]
     permitted << :password << :password_confirmation if params[:user][:password].present?
     params.require(:user).permit(permitted)
   end
@@ -66,8 +68,6 @@ class UsersController < ApplicationController
   rescue StandardError
     nil
   end
-
-  private
 
   def current_language_code
     case I18n.locale

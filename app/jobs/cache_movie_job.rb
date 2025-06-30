@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CacheMovieJob < ApplicationJob
   queue_as :low_priority
 
@@ -6,7 +8,7 @@ class CacheMovieJob < ApplicationJob
     en: 'en-US',
     ko: 'ko-KR',
     zh: 'zh-CN'
-  }
+  }.freeze
 
   def cache_movie_data(movie, language)
     CachedMovie.upsert(
